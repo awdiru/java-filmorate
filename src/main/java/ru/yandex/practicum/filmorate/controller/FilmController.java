@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import ru.yandex.practicum.filmorate.exceptions.BadRequestException;
+import ru.yandex.practicum.filmorate.exceptions.InternalServerErrorRequestException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import javax.validation.Valid;
@@ -16,7 +17,7 @@ import java.util.Map;
 @RequestMapping("/films")
 public class FilmController {
     private final Map<Integer, Film> films = new HashMap<>();
-
+    private int generateId = 1;
 
     @PostMapping
     public Film add(@RequestBody @Valid Film film) throws BadRequestException {
@@ -24,17 +25,22 @@ public class FilmController {
             log.info("Ошибка добавления фильма! Такой фильм уже добавлен.");
             throw new BadRequestException();
         }
+        film.setId(generateId++);
         films.put(film.getId(), film);
         log.info("Добавлен новый фильм. ID = " + film.getId());
         return film;
     }
 
     @PutMapping
-    public Film update(@RequestBody @Valid Film film) throws BadRequestException {
-        if (!films.containsKey(film.getId())) {
+    public Film update(@RequestBody @Valid Film film) throws InternalServerErrorRequestException {
+        if (film.getId() == null) {
+            log.info("Ошибка обновления фильма! Передан ID = null.");
+            throw new InternalServerErrorRequestException();
+        } else if (!films.containsKey(film.getId())) {
             log.info("Ошибка обновления фильма! Запрашиваемый фильм отсутствует.");
-            throw new BadRequestException();
+            throw new InternalServerErrorRequestException();
         }
+
         films.put(film.getId(), film);
         log.info("Фильм обновлен. ID = " + film.getId());
         return film;

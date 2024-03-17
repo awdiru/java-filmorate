@@ -4,10 +4,14 @@ package ru.yandex.practicum.filmorate.annotation.users.withoutSpaces;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-class WithoutSpacesValidator implements ConstraintValidator<WithoutSpaces, String> {
+public class WithoutSpacesValidator implements ConstraintValidator<WithoutSpaces, String> {
 
     @Override
     public boolean isValid(final String value, final ConstraintValidatorContext constraintValidatorContext) {
-        return  (value != null && !value.contains(" "));
+        try {
+            return (!value.contains(" "));
+        } catch (Exception e) {
+            return true;
+        }
     }
 }

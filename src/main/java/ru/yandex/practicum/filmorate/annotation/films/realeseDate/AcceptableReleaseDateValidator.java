@@ -9,6 +9,10 @@ public class AcceptableReleaseDateValidator implements ConstraintValidator<Accep
 
     @Override
     public boolean isValid(LocalDate value, ConstraintValidatorContext constraintValidatorContext) {
-        return !value.isBefore(LocalDate.of(1895, 12, 28));
+        try {
+            return !value.isBefore(LocalDate.of(1895, 12, 28));
+        } catch (Exception e) {
+            return true;
+        }
     }
 }
