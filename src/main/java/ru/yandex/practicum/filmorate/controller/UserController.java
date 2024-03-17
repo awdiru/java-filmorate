@@ -37,11 +37,8 @@ public class UserController {
 
     @PutMapping
     public User update(@RequestBody @Valid User user) throws InternalServerErrorRequestException {
-        if (user.getId() == null) {
-            log.info("Ошибка обновления пользователя! Передан ID = null.");
-            throw new InternalServerErrorRequestException();
-        } else if (!users.containsKey(user.getId())) {
-            log.info("Ошибка обновления пользователя! Запрашиваемый пользователь отсутствует.");
+        if (!users.containsKey(user.getId())) {
+            log.info("Ошибка обновления пользователя! Запрашиваемый id = " + user.getId() + " отсутствует.");
             throw new InternalServerErrorRequestException();
         }
         users.put(user.getId(), user);

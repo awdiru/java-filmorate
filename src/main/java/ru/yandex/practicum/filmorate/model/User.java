@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class User {
     @EqualsAndHashCode.Exclude
-    private Integer id;
+    private int id;
     //
     @NotEmpty(message = "Ошибка добавления пользователя! email не может быть пустым.")
     @Email(message = "Ошибка добавления пользователя! email должен быть записан по форме 'user@email.org.'")

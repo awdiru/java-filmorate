@@ -17,7 +17,7 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 public class Film {
-    private Integer id;
+    private int id;
     //
     @NotBlank(message = "Название фильма не должно быть пустым")
     private String name;

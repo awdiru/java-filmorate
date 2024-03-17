@@ -33,11 +33,8 @@ public class FilmController {
 
     @PutMapping
     public Film update(@RequestBody @Valid Film film) throws InternalServerErrorRequestException {
-        if (film.getId() == null) {
-            log.info("Ошибка обновления фильма! Передан ID = null.");
-            throw new InternalServerErrorRequestException();
-        } else if (!films.containsKey(film.getId())) {
-            log.info("Ошибка обновления фильма! Запрашиваемый фильм отсутствует.");
+        if (!films.containsKey(film.getId())) {
+            log.info("Ошибка обновления фильма! Запрашиваемый id = " + film.getId() + " отсутствует.");
             throw new InternalServerErrorRequestException();
         }
 
