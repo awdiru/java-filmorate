@@ -71,8 +71,8 @@ public class FilmTests {
     }
 
     @Test
-    void filmReleaseDurationNull() {
-        Film film = new Film(0, "film1", "description", LocalDate.of(2021, 3, 3), null);
+    void filmDurationNull() {
+        Film film = new Film(0, "film1", "description", LocalDate.of(2021, 3, 3), 0);
         Set<ConstraintViolation<Film>> violations = validator.validate(film);
         for (ConstraintViolation<Film> f : violations) {
             System.out.println("\n" + f + "\n");
@@ -87,7 +87,7 @@ public class FilmTests {
             s.append("a");
         }
         String description = s.toString();
-        Film film = new Film(null, null, description, LocalDate.of(1893, 3, 3), null);
+        Film film = new Film(0, null, description, LocalDate.of(1893, 3, 3), 0);
         Set<ConstraintViolation<Film>> violations = validator.validate(film);
         for (ConstraintViolation<Film> f : violations) {
             System.out.println("\n" + f + "\n");

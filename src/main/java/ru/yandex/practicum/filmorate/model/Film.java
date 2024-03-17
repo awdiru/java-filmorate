@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.model;
 
 import lombok.*;
-//import ru.yandex.practicum.filmorate.annotation.films.maxCharacter.MaxCharacter;
 import ru.yandex.practicum.filmorate.annotation.films.realeseDate.AcceptableReleaseDate;
 
 //import javax.validation.constraints.Max;
@@ -31,5 +30,5 @@ public class Film {
     //
     @NotNull(message = "Ошибка добавления фильма! Продолжительность не может быть пустой.")
     @Positive
-    private Integer duration;
+    private int duration;
 }

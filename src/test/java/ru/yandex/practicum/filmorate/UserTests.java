@@ -30,7 +30,7 @@ class UserTests {
 
     @Test
     void userIdNull() {
-        User user = new User(null, "user@email.com", "loginUser", "userName", LocalDate.of(2014, 3, 3));
+        User user = new User(0, "user@email.com", "loginUser", "userName", LocalDate.of(2014, 3, 3));
         Set<ConstraintViolation<User>> violations = validator.validate(user);
         for (ConstraintViolation<User> u : violations) {
             System.out.println(u + "\n\n");
@@ -110,7 +110,7 @@ class UserTests {
 
     @Test
     void allIncorrectField() {
-        User user = new User(null, "usail.com", "userLo gin", null, LocalDate.of(2030, 3, 3));
+        User user = new User(0, "usail.com", "userLo gin", null, LocalDate.of(2030, 3, 3));
         Set<ConstraintViolation<User>> violations = validator.validate(user);
         for (ConstraintViolation<User> u : violations) {
             System.out.println(u + "\n\n");
