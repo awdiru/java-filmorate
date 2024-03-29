@@ -3,7 +3,6 @@ package ru.yandex.practicum.filmorate.controller.service;
 import ru.yandex.practicum.filmorate.controller.storage.film.FilmStorage;
 import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.List;
 
