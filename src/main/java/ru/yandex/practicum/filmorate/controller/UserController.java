@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import ru.yandex.practicum.filmorate.controller.service.user.UserServiceApp;
+import ru.yandex.practicum.filmorate.controller.service.user.UserServiceImpl;
 import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
 import ru.yandex.practicum.filmorate.model.User;
 
@@ -18,10 +18,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    private final UserServiceApp userService;
+    private final UserServiceImpl userService;
 
     @Autowired
-    public UserController(UserServiceApp userService) {
+    public UserController(UserServiceImpl userService) {
         this.userService = userService;
     }
 

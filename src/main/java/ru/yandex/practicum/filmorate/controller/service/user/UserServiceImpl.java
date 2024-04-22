@@ -13,11 +13,11 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-public class UserServiceApp implements UserService {
+public class UserServiceImpl implements UserService {
     private final UserStorage userStorage;
 
     @Autowired
-    public UserServiceApp(UserStorage userStorage) {
+    public UserServiceImpl(UserStorage userStorage) {
         this.userStorage = userStorage;
     }
 
@@ -25,20 +25,18 @@ public class UserServiceApp implements UserService {
     public User addFriend(int idUser, int idFriend) throws IncorrectIdException {
         User user = userStorage.search(idUser);
         User friend = userStorage.search(idFriend);
+
         if (user == null) throw new IncorrectIdException("Пользователь с ID " + idUser + " не найден");
-        else if (friend == null) throw new IncorrectIdException("Друг с ID " + idFriend + " не найден");
+        if (friend == null) throw new IncorrectIdException("Друг с ID " + idFriend + " не найден");
 
+        if (friend.getFriends() == null) friend.setFriends(new HashSet<>());
         Set<Integer> newFriend = friend.getFriends();
-        if (newFriend == null) newFriend = new HashSet<>();
-
         newFriend.add(user.getId());
-        friend.setFriends(newFriend);
 
+        if (user.getFriends() == null) user.setFriends(new HashSet<>());
         newFriend = user.getFriends();
-        if (newFriend == null) newFriend = new HashSet<>();
-
         newFriend.add(friend.getId());
-        user.setFriends(newFriend);
+
         return user;
     }
 
@@ -47,12 +45,13 @@ public class UserServiceApp implements UserService {
         User user = userStorage.search(idUser);
         User friend = userStorage.search(idFriend);
 
-        if (user == null)
-            throw new IncorrectIdException("Пользователь с ID " + idUser + " не найден");
-        else if (friend == null)
-            throw new IncorrectIdException("Друг с ID " + idFriend + " не найден");
+        if (user == null) throw new IncorrectIdException("Пользователь с ID " + idUser + " не найден");
+        if (friend == null) throw new IncorrectIdException("Друг с ID " + idFriend + " не найден");
 
+        if (user.getFriends() == null) user.setFriends(new HashSet<>());
         user.getFriends().remove(friend.getId());
+
+        if (friend.getFriends() == null) friend.setFriends(new HashSet<>());
         friend.getFriends().remove(user.getId());
 
         return user;
@@ -78,8 +77,12 @@ public class UserServiceApp implements UserService {
     public List<User> getMutualFriends(int idFriend1, int idFriend2) throws IncorrectIdException {
         User friend1 = userStorage.search(idFriend1);
         User friend2 = userStorage.search(idFriend2);
+
         if (friend1 == null) throw new IncorrectIdException("Пользователь с ID " + idFriend1 + " не найден");
         if (friend2 == null) throw new IncorrectIdException("Пользователь с ID " + idFriend2 + " не найден");
+
+        if (friend1.getFriends() == null) friend1.setFriends(new HashSet<>());
+        if (friend2.getFriends() == null) friend2.setFriends(new HashSet<>());
 
         Set<Integer> mutualFriends = friend1.getFriends();
         mutualFriends.retainAll(friend2.getFriends());
