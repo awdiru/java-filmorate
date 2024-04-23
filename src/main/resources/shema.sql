@@ -18,7 +18,7 @@ CREATE TABLE "films" (
   "description" varchar[200],
   "releaseDate" date,
   "duration" integer,
-  "rating" integer
+  "rating_id" integer
 );
 
 CREATE TABLE "ratings" (
@@ -45,7 +45,7 @@ ALTER TABLE "friends" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("user_id")
 
 ALTER TABLE "friends" ADD FOREIGN KEY ("friend_user_id") REFERENCES "users" ("user_id");
 
-ALTER TABLE "films" ADD FOREIGN KEY ("rating") REFERENCES "ratings" ("rating_id");
+ALTER TABLE "films" ADD FOREIGN KEY ("rating_id") REFERENCES "ratings" ("rating_id");
 
 ALTER TABLE "likes" ADD FOREIGN KEY ("film_id") REFERENCES "films" ("film_id");
 

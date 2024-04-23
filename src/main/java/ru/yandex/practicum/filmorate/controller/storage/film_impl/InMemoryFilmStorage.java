@@ -1,11 +1,12 @@
 package ru.yandex.practicum.filmorate.controller.storage.film;
 
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.controller.storage.FilmStorage;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.*;
 
-@Component
+@Component("InMemoryFilmStorage")
 public class InMemoryFilmStorage implements FilmStorage {
     private final Map<Integer, Film> films;
     private int generateID;

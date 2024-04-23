@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.controller.storage.user;
 
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.controller.storage.UserStorage;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.HashMap;
@@ -8,7 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-@Component
+@Component("InMemoryUserStorage")
 public class InMemoryUserStorage implements UserStorage {
     private final Map<Integer, User> users;
     private int genegateID;
