@@ -9,99 +9,100 @@
 ### Добавить нового пользователя:
 ```roomsql
 INSERT INTO users (email, login, name, birthday)
-VALUES ('email@yandex.ru', 'login', 'user name', '2001-11-01');
+VALUES (?, ?, ?, ?);
 ```
 ### Обновить данные пользователя:
 ```roomsql
 UPDATE users 
-SET name = 'new name' 
-WHERE name = 'user name';
+SET email = ?, login = ?, name = ?, birthday = ? 
+WHERE user_id = ?;
 ```
-### Удаление пользователя с email email@yandex.ru:
+### Удалить пользователя:
 ```roomsql
 DELETE FROM users
-WHERE email = 'email@yandex.ru'; 
+WHERE user_id = ?; 
 ```
-### Найти пользователя с id 5
+### Найти пользователя:
 ```roomsql
-SELECT * FROM users WHERE users_id = 5;
+SELECT * FROM users WHERE users_id = ?;
 ```
-### Добавить друга c id 5 пользователю с id 1
+### Добавить друга пользователю:
 ```roomsql
 INSERT INTO friends (user_id, friend_user_id)
-VALUES (1, 5);
+VALUES (?, ?);
 ```
-### Удалить друга с id 5 у пользователя м id 1
+### Удалить друга у пользователя:
 ```roomsql
 DELETE FROM friends
 WHERE 
-    user_id = 1
+    user_id = ?
 AND 
-    friend_user_id = 5;
+    friend_user_id = ?;
 ```
-### Показать список друзей пользователя с id 5
+### Показать список друзей пользователя:
 ```roomsql
-SELECT u.name, u.login, u.email, f.confirm 
+SELECT u.email, u.login, u.name, u.birthday
 FROM 
-    friends AS f
+    users AS u
 JOIN
-    users AS u ON f.friend_user_id = u.user_id
-WHERE
-    f.user_id = 5;
+    friends AS f ON f.friend_id = u.user_id
+WHERE f.user_id = ?;
 ```
-### Показать список общих друзей пользователей с id 1 и 5
+### Показать список общих друзей пользователей:
 ```roomsql
-SELECT u.name, u.login, u.email FROM users
+SELECT name, login, email, birthday FROM users
 WHERE
     user_id IN (
-        SELECT friends_user_id FROM friends WHERE user_id = 1
+        SELECT friends_user_id FROM friends WHERE user_id = ?
     ) AND user_id IN (
-        SELECT friends_user_id FROM friends WHERE user_id = 5
+        SELECT friends_user_id FROM friends WHERE user_id = ?
     );
 ```
 ***
 ### Добавить фильм
 ```roomsql
 INSERT INTO films (name, description, releaseDate, duration, rating)
-VALUES ('film', 'description', '2011-11-01', 122213, 3);
+VALUES (?, ?, ?, ?, ?);
 ```
-### Обновить данные фильма с id 1
+### Обновить данные фильма:
 ```roomsql
 UPDATE films
-SET description = 'new description'
-WHERE film_id = 1;
+SET name = ?, description = ?, releaseDate = ?, duration = ?, rating = ?
+WHERE film_id = ?;
 ```
-### Удалить фильм с id 1 из базы данных
+### Удалить фильм из базы данных:
 ```roomsql
 DELETE FROM films
-WHERE film_id = 1;
+WHERE film_id = ?;
 ```
-### Найти фильм с id 1
+### Найти фильм:
 ```roomsql
-SELECT * FROM films
-WHERE film_id = 1;
+SELECT name, description, releaseDate, duration, rating 
+FROM films
+WHERE film_id = ?;
 ``` 
-### Добавить лайк фильму с id 1 от пользователя с id 5
+### Добавить лайк фильму от пользователя:
 ```roomsql
 INSERT INTO likes (film_id, user_id)
-VALUES (1, 5);
+VALUES (?, ?);
 ```
-### Удалить лайк у фильма с id 1 от пользователя с id 5
+### Удалить лайк у фильма от пользователя
 ```roomsql
 DELETE FROM likes
 WHERE
-    film_id = 1
+    film_id = ?
 AND 
-    user_id = 5;
+    user_id = ?;
 ```
-### Показать 10 самых популярных фильмов
+### Показать N самых популярных фильмов
 ```roomsql
-SELECT f.name AS film, COUNT(l.user_id) AS likes
-FROM
-    likes AS l
-JOIN 
-    films AS f ON l.film_id = f.film_id
-GROUP BY film
-ORDER BY likes DESC
-LIMIT 10;
+SELECT name, description, releaseDate, duration, rating
+FROM films
+WHERE film_id IN (
+    SELECT film_id
+    FROM likes
+    GROUP BY film_id
+    ORDER BY COUNT(user_id) DESC
+    LIMIT ?
+);
 ```

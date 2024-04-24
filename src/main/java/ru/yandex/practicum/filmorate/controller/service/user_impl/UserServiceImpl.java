@@ -3,7 +3,7 @@ package ru.yandex.practicum.filmorate.controller.service.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.controller.service.UserService;
-import ru.yandex.practicum.filmorate.controller.storage.user.UserStorage;
+import ru.yandex.practicum.filmorate.controller.storage.UserStorage;
 import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
 import ru.yandex.practicum.filmorate.model.User;
 
@@ -88,16 +88,18 @@ public class UserServiceImpl implements UserService {
         mutualFriends.retainAll(friend2.getFriends());
 
         List<User> getFriends = new ArrayList<>();
-        for (User user : userStorage.findAll()) {
-            if (mutualFriends.contains(user.getId())) getFriends.add(user);
+        for (Integer id : mutualFriends) {
+            User friend = userStorage.search(id);
+            if (friend != null)
+                getFriends.add(friend);
         }
 
         return getFriends;
     }
 
     @Override
-    public User create(User user) {
-        return userStorage.create(user);
+    public User add(User user) {
+        return userStorage.add(user);
     }
 
     @Override

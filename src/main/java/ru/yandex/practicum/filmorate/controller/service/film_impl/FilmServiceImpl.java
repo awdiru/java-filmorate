@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.controller.service.FilmService;
 import ru.yandex.practicum.filmorate.controller.service.UserService;
-import ru.yandex.practicum.filmorate.controller.storage.film.FilmStorage;
+import ru.yandex.practicum.filmorate.controller.storage.FilmStorage;
 import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
@@ -33,8 +33,8 @@ public class FilmServiceImpl implements FilmService {
 
         if (film.getLikes() == null) film.setLikes(new HashSet<>());
 
-        Set<String> likes = film.getLikes();
-        likes.add(user.getEmail());
+        Set<Integer> likes = film.getLikes();
+        likes.add(user.getId());
         return film;
     }
 
@@ -46,8 +46,8 @@ public class FilmServiceImpl implements FilmService {
         if (film == null) throw new IncorrectIdException("Фильм с ID " + idFilm + " не найден.");
         if (user == null) throw new IncorrectIdException("Пользователь с ID " + idUser + " не найден.");
 
-        Set<String> likes = film.getLikes();
-        if (likes != null) likes.remove(user.getEmail());
+        Set<Integer> likes = film.getLikes();
+        if (likes != null) likes.remove(user.getId());
         return film;
     }
 
@@ -58,11 +58,8 @@ public class FilmServiceImpl implements FilmService {
         if (count < 0) count = 0;
 
         return filmStorage.findAll().stream()
-                .sorted((Film film1, Film film2) -> {
-                    if (film1.getLikes().size() <= film2.getLikes().size())
-                        return 1;
-                    else return -1;
-                })
+                .filter(film -> !film.getLikes().isEmpty())
+                .sorted((Film film1, Film film2) -> Integer.compare(film2.getLikes().size(), film1.getLikes().size()))
                 .limit(count)
                 .collect(Collectors.toList());
     }
@@ -90,47 +87,5 @@ public class FilmServiceImpl implements FilmService {
     @Override
     public List<Film> findAll() {
         return filmStorage.findAll();
-    }
-
-    private void sortFilm(List<Film> films) {
-        if (films.size() == 1 || films.isEmpty())
-            return;
-
-        boolean[] boolArray = new boolean[films.size()];
-        Arrays.fill(boolArray, false);
-
-        for (int i = 0; i < films.size(); i++) {
-            if (boolArray[i])
-                continue;
-            if (films.get(i).getLikes() == null)
-                films.get(i).setLikes(new HashSet<>());
-
-            Film cash = films.get(i);
-            int index;
-            int oldIndex = i;
-
-            do {
-                index = i;
-                for (int j = i; j < films.size(); j++) {
-                    if (films.get(j) == null)
-                        films.get(j).setLikes(new HashSet<>());
-                    if (films.get(j).getLikes().size() < cash.getLikes().size())
-                        index++;
-                }
-                while (boolArray[index])
-                    index++;
-
-                boolArray[index] = true;
-
-                if (oldIndex == index)
-                    break;
-
-                Film swap = cash;
-                cash = films.get(index);
-                films.set(index, swap);
-
-                oldIndex = index;
-            } while (i != index);
-        }
     }
 }
