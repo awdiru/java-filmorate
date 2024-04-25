@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,26 +21,43 @@ public class FilmController {
     private final FilmService filmService;
 
     @Autowired
-    public FilmController(FilmService filmStorage) {
-        this.filmService = filmStorage;
+    public FilmController(@Qualifier("FilmServiceImpl") FilmService filmService) {
+        this.filmService = filmService;
     }
 
     @PostMapping
     public Film add(@RequestBody @Valid Film film) {
-        Film addFilm = filmService.add(film);
-        if (addFilm == null)
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                    "Ошибка добавления фильма! Фильм с ID " + film.getId() + " уже существует.");
-        return addFilm;
+        return filmService.add(film);
     }
 
     @PutMapping
     public Film update(@RequestBody @Valid Film film) {
-        Film updFilm = filmService.update(film);
-        if (updFilm == null)
+        try {
+            return filmService.update(film);
+        } catch (IncorrectIdException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "Ошибка обновления фильма! Фильм с ID " + film.getId() + " не найден.");
-        return updFilm;
+                    "Ошибка Обновления фильма! " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/{id}")
+    public Film search(@PathVariable Integer id) {
+        try {
+            return filmService.search(id);
+        } catch (IncorrectIdException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Ошибка поиска фильма! " + e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public Film delete(@PathVariable Integer id) {
+        try {
+            return filmService.delete(id);
+        } catch (IncorrectIdException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Ошибка удаления фильма! " + e.getMessage());
+        }
     }
 
     @GetMapping
@@ -49,14 +67,12 @@ public class FilmController {
 
     @PutMapping("/{id}/like/{userId}")
     public Film addLike(@PathVariable int id, @PathVariable int userId) {
-        Film film;
         try {
-            film = filmService.addLike(id, userId);
+            return filmService.addLike(id, userId);
         } catch (IncorrectIdException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
                     "Ошибка добавления лайка! " + e.getMessage());
         }
-        return film;
     }
 
     @DeleteMapping("/{id}/like/{userId}")
@@ -71,7 +87,7 @@ public class FilmController {
         return film;
     }
 
-    @GetMapping("/popular")
+    @GetMapping("/popular/{id}")
     public List<Film> popFilms(@RequestParam(defaultValue = "10") int count) {
         return filmService.popFilms(count);
     }

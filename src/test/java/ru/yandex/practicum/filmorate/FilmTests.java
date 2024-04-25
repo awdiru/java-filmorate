@@ -7,7 +7,6 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -18,7 +17,7 @@ public class FilmTests {
 
     @Test
     void filmWithoutErrors() {
-        Film film = new Film(0, "film1", "description", LocalDate.of(2021, 3, 3), 127, new HashSet<>());
+        Film film = new Film(0, "film1", "description", LocalDate.of(2021, 3, 3), 127, 1);
         Set<ConstraintViolation<Film>> violations = validator.validate(film);
         for (ConstraintViolation<Film> f : violations) {
             System.out.println("\n" + f + "\n");
@@ -28,7 +27,7 @@ public class FilmTests {
 
     @Test
     void filmNameNull() {
-        Film film = new Film(0, null, "description", LocalDate.of(2021, 3, 3), 127, new HashSet<>());
+        Film film = new Film(0, null, "description", LocalDate.of(2021, 3, 3), 127,1);
         Set<ConstraintViolation<Film>> violations = validator.validate(film);
         for (ConstraintViolation<Film> f : violations) {
             System.out.println("\n" + f + "\n");
@@ -43,7 +42,7 @@ public class FilmTests {
             s.append("a");
         }
         String description = s.toString();
-        Film film = new Film(0, "film1", description, LocalDate.of(2021, 3, 3), 127, new HashSet<>());
+        Film film = new Film(0, "film1", description, LocalDate.of(2021, 3, 3), 127, 1);
         Set<ConstraintViolation<Film>> violations = validator.validate(film);
         for (ConstraintViolation<Film> f : violations) {
             System.out.println("\n" + f + "\n");
@@ -53,7 +52,7 @@ public class FilmTests {
 
     @Test
     void filmReleaseDateIncorrect() {
-        Film film = new Film(0, "film1", "description", LocalDate.of(1893, 3, 3), 127, new HashSet<>());
+        Film film = new Film(0, "film1", "description", LocalDate.of(1893, 3, 3), 127, 1);
         Set<ConstraintViolation<Film>> violations = validator.validate(film);
         for (ConstraintViolation<Film> f : violations) {
             System.out.println("\n" + f + "\n");
@@ -63,7 +62,7 @@ public class FilmTests {
 
     @Test
     void filmReleaseDateNull() {
-        Film film = new Film(0, "film1", "description", null, 127, new HashSet<>());
+        Film film = new Film(0, "film1", "description", null, 127, 1);
         Set<ConstraintViolation<Film>> violations = validator.validate(film);
         for (ConstraintViolation<Film> f : violations) {
             System.out.println("\n" + f + "\n");
@@ -73,7 +72,7 @@ public class FilmTests {
 
     @Test
     void filmDurationNull() {
-        Film film = new Film(0, "film1", "description", LocalDate.of(2021, 3, 3), 0, new HashSet<>());
+        Film film = new Film(0, "film1", "description", LocalDate.of(2021, 3, 3), 0, 1);
         Set<ConstraintViolation<Film>> violations = validator.validate(film);
         for (ConstraintViolation<Film> f : violations) {
             System.out.println("\n" + f + "\n");
@@ -88,7 +87,7 @@ public class FilmTests {
             s.append("a");
         }
         String description = s.toString();
-        Film film = new Film(0, null, description, LocalDate.of(1893, 3, 3), 0, new HashSet<>());
+        Film film = new Film(0, null, description, LocalDate.of(1893, 3, 3), 0, 1);
         Set<ConstraintViolation<Film>> violations = validator.validate(film);
         for (ConstraintViolation<Film> f : violations) {
             System.out.println("\n" + f + "\n");

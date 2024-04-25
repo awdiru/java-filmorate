@@ -16,8 +16,8 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 public class Film {
-    private int id;
-    @NotBlank(message = "Название фильма не должно быть пустым")
+    private Integer id;
+    @NotBlank(message = "Ошибка добавления фильма! Название фильма не может быть пустым.")
     @EqualsAndHashCode.Exclude
     private String name;
     @Size(max = 200, message = "Ошибка добавления фильма! Описание не может превышать 200 символов.")
@@ -30,7 +30,8 @@ public class Film {
     @NotNull(message = "Ошибка добавления фильма! Продолжительность не может быть пустой.")
     @Positive
     @EqualsAndHashCode.Exclude
-    private int duration;
-    @EqualsAndHashCode.Exclude
-    private Set<String> likes;
+    private Integer duration;
+    @NotNull(message = "Ошибка добавления фильма! Рейтинг не может быть пустым.")
+    private Integer ratingId;
+    private Set<Integer> likes;
 }

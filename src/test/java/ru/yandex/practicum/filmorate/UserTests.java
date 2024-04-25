@@ -9,7 +9,6 @@ import javax.validation.Validation;
 
 import javax.validation.Validator;
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,7 +20,7 @@ class UserTests {
 
     @Test
     void userWithoutErrors() {
-        User user = new User(0, "user@email.com", "loginUser", "userName", LocalDate.of(2014, 3, 3), new HashSet<>());
+        User user = new User(0, "user@email.com", "loginUser", "userName", LocalDate.of(2014, 3, 3));
         Set<ConstraintViolation<User>> violations = validator.validate(user);
         for (ConstraintViolation<User> u : violations) {
             System.out.println(u + "\n\n");
@@ -31,7 +30,7 @@ class UserTests {
 
     @Test
     void userIdNull() {
-        User user = new User(0, "user@email.com", "loginUser", "userName", LocalDate.of(2014, 3, 3), new HashSet<>());
+        User user = new User(0, "user@email.com", "loginUser", "userName", LocalDate.of(2014, 3, 3));
         Set<ConstraintViolation<User>> violations = validator.validate(user);
         for (ConstraintViolation<User> u : violations) {
             System.out.println(u + "\n\n");
@@ -41,7 +40,7 @@ class UserTests {
 
     @Test
     void userLoginIncorrect() {
-        User user = new User(0, "user@email.com", "loginU ser", "userName", LocalDate.of(2014, 3, 3), new HashSet<>());
+        User user = new User(0, "user@email.com", "loginU ser", "userName", LocalDate.of(2014, 3, 3));
         Set<ConstraintViolation<User>> violations = validator.validate(user);
         for (ConstraintViolation<User> u : violations) {
             System.out.println(u + "\n\n");
@@ -51,7 +50,7 @@ class UserTests {
 
     @Test
     void userLoginNull() {
-        User user = new User(0, "user@email.com", null, "userName", LocalDate.of(2014, 3, 3), new HashSet<>());
+        User user = new User(0, "user@email.com", null, "userName", LocalDate.of(2014, 3, 3));
         Set<ConstraintViolation<User>> violations = validator.validate(user);
         for (ConstraintViolation<User> u : violations) {
             System.out.println(u + "\n\n");
@@ -61,7 +60,7 @@ class UserTests {
 
     @Test
     void userEmailIncorrect() {
-        User user = new User(0, "null", "userLogin", "userName", LocalDate.of(2014, 3, 3), new HashSet<>());
+        User user = new User(0, "null", "userLogin", "userName", LocalDate.of(2014, 3, 3));
         Set<ConstraintViolation<User>> violations = validator.validate(user);
         for (ConstraintViolation<User> u : violations) {
             System.out.println(u + "\n\n");
@@ -71,7 +70,7 @@ class UserTests {
 
     @Test
     void userEmailNull() {
-        User user = new User(0, null, "userLogin", "userName", LocalDate.of(2014, 3, 3), new HashSet<>());
+        User user = new User(0, null, "userLogin", "userName", LocalDate.of(2014, 3, 3));
         Set<ConstraintViolation<User>> violations = validator.validate(user);
         for (ConstraintViolation<User> u : violations) {
             System.out.println(u + "\n\n");
@@ -81,7 +80,7 @@ class UserTests {
 
     @Test
     void userBirthdayIncorrect() {
-        User user = new User(0, "user@email.com", "userLogin", "userName", LocalDate.of(2030, 3, 3), new HashSet<>());
+        User user = new User(0, "user@email.com", "userLogin", "userName", LocalDate.of(2030, 3, 3));
         Set<ConstraintViolation<User>> violations = validator.validate(user);
         for (ConstraintViolation<User> u : violations) {
             System.out.println(u + "\n\n");
@@ -91,7 +90,7 @@ class UserTests {
 
     @Test
     void userBirthdayNull() {
-        User user = new User(0, "user@email.com", "userLogin", "userName", null, new HashSet<>());
+        User user = new User(0, "user@email.com", "userLogin", "userName", null);
         Set<ConstraintViolation<User>> violations = validator.validate(user);
         for (ConstraintViolation<User> u : violations) {
             System.out.println(u + "\n\n");
@@ -101,7 +100,7 @@ class UserTests {
 
     @Test
     void userNameNull() {
-        User user = new User(0, "user@email.com", "userLogin", null, LocalDate.of(2014, 3, 3), new HashSet<>());
+        User user = new User(0, "user@email.com", "userLogin", null, LocalDate.of(2014, 3, 3));
         Set<ConstraintViolation<User>> violations = validator.validate(user);
         for (ConstraintViolation<User> u : violations) {
             System.out.println(u + "\n\n");
@@ -111,7 +110,7 @@ class UserTests {
 
     @Test
     void allIncorrectField() {
-        User user = new User(0, "usail.com", "userLo gin", null, LocalDate.of(2030, 3, 3), new HashSet<>());
+        User user = new User(0, "usail.com", "userLo gin", null, LocalDate.of(2030, 3, 3));
         Set<ConstraintViolation<User>> violations = validator.validate(user);
         for (ConstraintViolation<User> u : violations) {
             System.out.println(u + "\n\n");

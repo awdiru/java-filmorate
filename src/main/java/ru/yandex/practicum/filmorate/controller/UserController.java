@@ -3,10 +3,11 @@ package ru.yandex.practicum.filmorate.controller;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import ru.yandex.practicum.filmorate.controller.service.user.UserServiceImpl;
+import ru.yandex.practicum.filmorate.controller.service.UserService;
 import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
 import ru.yandex.practicum.filmorate.model.User;
 
@@ -18,29 +19,36 @@ import java.util.List;
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
     @Autowired
-    public UserController(UserServiceImpl userService) {
+    public UserController(@Qualifier("UserServiceImpl") UserService userService) {
         this.userService = userService;
     }
 
     @PostMapping
     public User add(@RequestBody @Valid User user) {
-        User addUser = userService.create(user);
-        if (addUser == null)
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                    "Ошибка добавления пользователя! Пользователь с email " + user.getEmail() + " уже существует.");
-        return addUser;
+        return userService.add(user);
     }
 
     @PutMapping
     public User update(@RequestBody @Valid User user) {
-        User updUser = userService.update(user);
-        if (updUser == null)
+        try {
+            return userService.update(user);
+        } catch (IncorrectIdException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "Ошибка обновления пользователя! Пользователь с ID " + user.getId() + " не найден.");
-        return updUser;
+                    "Ошибка обновления пользователя! " + e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public User delete(@PathVariable Integer id) {
+        try {
+            return userService.delete(id);
+        } catch (IncorrectIdException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Ошибка удаления фильма! " + e.getMessage());
+        }
     }
 
     @GetMapping
@@ -50,11 +58,12 @@ public class UserController {
 
     @GetMapping("/{id}")
     public User search(@PathVariable int id) {
-        User user = userService.search(id);
-        if (user == null)
+        try {
+            return userService.search(id);
+        } catch (IncorrectIdException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "Ошибка поиска пользователя! Пользователь с ID " + id + " не найден.");
-        return user;
+                    "Ошибка поиска пользователя! " + e.getMessage());
+        }
     }
 
     @PutMapping("/{id}/friends/{friendId}")

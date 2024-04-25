@@ -14,7 +14,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class User {
     @EqualsAndHashCode.Exclude
-    private int id;
+    private Integer id;
     @NotEmpty(message = "Ошибка добавления пользователя! email не может быть пустым.")
     @Email(message = "Ошибка добавления пользователя! email должен быть записан по форме 'user@email.org.'")
     private String email;
@@ -28,6 +28,5 @@ public class User {
     @Past(message = "Ошибка добавления пользователя! Дата рождения не может быть в будущем.")
     @EqualsAndHashCode.Exclude
     private LocalDate birthday;
-    @EqualsAndHashCode.Exclude
     private Set<Integer> friends;
 }
