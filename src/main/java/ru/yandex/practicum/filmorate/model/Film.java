@@ -28,6 +28,7 @@ public class Film {
     @EqualsAndHashCode.Exclude
     private LocalDate releaseDate;
     @Positive
+    @NotNull(message = "Ошибка добавления фильма! Продолжительность не может быть пустой.")
     @EqualsAndHashCode.Exclude
     private Integer duration;
     @EqualsAndHashCode.Exclude

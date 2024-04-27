@@ -32,7 +32,7 @@ class UserTests {
 
     @Test
     void userIdNull() {
-        User user = new User(0, "user@email.com", "loginUser", "userName",
+        User user = new User(null, "user@email.com", "loginUser", "userName",
                 LocalDate.of(2014, 3, 3), new HashSet<>());
         Set<ConstraintViolation<User>> violations = validator.validate(user);
         for (ConstraintViolation<User> u : violations) {

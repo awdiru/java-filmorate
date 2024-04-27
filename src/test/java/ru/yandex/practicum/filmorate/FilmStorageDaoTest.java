@@ -30,6 +30,7 @@ public class FilmStorageDaoTest {
 
     @Test
     public void testAddAndGetFilmById() throws IncorrectIdException {
+        deleteBd();
         Film film = createFilm();
         FilmStorage filmStorage = new FilmStorageDao(jdbcTemplate);
         filmStorage.add(film);
@@ -43,6 +44,7 @@ public class FilmStorageDaoTest {
 
     @Test
     public void testUpdateFilm() {
+        deleteBd();
         Film film = createFilm();
         FilmStorageDao filmStorage = new FilmStorageDao(jdbcTemplate);
         filmStorage.add(film);
@@ -61,6 +63,7 @@ public class FilmStorageDaoTest {
 
     @Test
     public void testDeleteFilm() {
+        deleteBd();
         Film film = createFilm();
         FilmStorageDao filmStorage = new FilmStorageDao(jdbcTemplate);
         filmStorage.add(film);
@@ -73,6 +76,7 @@ public class FilmStorageDaoTest {
 
     @Test
     public void testFindAllFilms() {
+        deleteBd();
         FilmStorageDao filmStorage = new FilmStorageDao(jdbcTemplate);
         for (int i = 1; i < 5; i++) {
             Film film = createFilm();
@@ -80,7 +84,7 @@ public class FilmStorageDaoTest {
         }
 
         List<Film> films = new ArrayList<>();
-        for (int i = 5; i < 9; i++) {
+        for (int i = 1; i < 5; i++) {
             Film film = createFilm();
             film.setId(i);
             films.add(film);
@@ -95,6 +99,7 @@ public class FilmStorageDaoTest {
 
     @Test
     public void testAddLike() {
+        deleteBd();
         Film film = createFilm();
         FilmStorageDao filmStorage = new FilmStorageDao(jdbcTemplate);
         filmStorage.add(film);
@@ -115,6 +120,7 @@ public class FilmStorageDaoTest {
 
     @Test
     public void testDeleteLike() {
+        deleteBd();
         Film film = createFilm();
         FilmStorageDao filmStorage = new FilmStorageDao(jdbcTemplate);
         filmStorage.add(film);
@@ -135,6 +141,7 @@ public class FilmStorageDaoTest {
 
     @Test
     public void testPopFilms() throws IncorrectIdException {
+        deleteBd();
         FilmStorage filmStorage = new FilmStorageDao(jdbcTemplate);
         UserStorage userStorage = new UserStorageDao(jdbcTemplate);
 
@@ -185,5 +192,22 @@ public class FilmStorageDaoTest {
     private User createUser() {
         return new User(1, "user@email.com", "user_login", "user_name",
                 LocalDate.of(1990, 1, 1), new HashSet<>());
+    }
+
+    private void deleteBd() {
+        String sql = "TRUNCATE TABLE likes;";
+        jdbcTemplate.update(sql);
+        sql = "TRUNCATE TABLE film_genre;";
+        jdbcTemplate.update(sql);
+        sql = "DELETE FROM films;";
+        jdbcTemplate.update(sql);
+        sql = "ALTER TABLE films ALTER COLUMN film_id RESTART WITH 1;";
+        jdbcTemplate.update(sql);
+        sql = "TRUNCATE TABLE friends;";
+        jdbcTemplate.update(sql);
+        sql = "DELETE FROM users;";
+        jdbcTemplate.update(sql);
+        sql = "ALTER TABLE users ALTER COLUMN user_id RESTART WITH 1;";
+        jdbcTemplate.update(sql);
     }
 }

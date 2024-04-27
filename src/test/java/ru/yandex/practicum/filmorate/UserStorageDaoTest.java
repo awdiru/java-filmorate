@@ -24,6 +24,7 @@ public class UserStorageDaoTest {
 
     @Test
     public void testAddAndSearchById() throws IncorrectIdException {
+        deleteBd();
         User user = createUser();
         UserStorage userStorage = new UserStorageDao(jdbcTemplate);
         userStorage.add(user);
@@ -37,6 +38,7 @@ public class UserStorageDaoTest {
 
     @Test
     public void testUpdateUser() throws IncorrectIdException {
+        deleteBd();
         User user = createUser();
         UserStorage userStorage = new UserStorageDao(jdbcTemplate);
         userStorage.add(user);
@@ -54,6 +56,7 @@ public class UserStorageDaoTest {
 
     @Test
     public void testDeleteUser() throws IncorrectIdException {
+        deleteBd();
         User user = createUser();
         UserStorage userStorage = new UserStorageDao(jdbcTemplate);
         userStorage.add(user);
@@ -65,6 +68,7 @@ public class UserStorageDaoTest {
 
     @Test
     public void testFindAllUsers() {
+        deleteBd();
         UserStorage userStorage = new UserStorageDao(jdbcTemplate);
         for (int i = 1; i < 5; i++) {
             User user = createUser();
@@ -87,6 +91,7 @@ public class UserStorageDaoTest {
 
     @Test
     public void testAddFriend() throws IncorrectIdException {
+        deleteBd();
         User user1 = createUser();
         UserStorage userStorage = new UserStorageDao(jdbcTemplate);
         userStorage.add(user1);
@@ -108,6 +113,7 @@ public class UserStorageDaoTest {
 
     @Test
     public void testDeleteFriend() throws IncorrectIdException {
+        deleteBd();
         User user1 = createUser();
         UserStorage userStorage = new UserStorageDao(jdbcTemplate);
         userStorage.add(user1);
@@ -130,6 +136,7 @@ public class UserStorageDaoTest {
 
     @Test
     public void testGetFriendsUser() throws IncorrectIdException {
+        deleteBd();
         User user = createUser();
         UserStorage userStorage = new UserStorageDao(jdbcTemplate);
         userStorage.add(user);
@@ -143,7 +150,6 @@ public class UserStorageDaoTest {
         for (int i = 2; i < 5; i++) {
             User friend = createUser();
             friend.setId(i);
-            friend.getFriends().add(1);
             friends.add(friend);
         }
         List<User> searchFriends = userStorage.getFriends(1);
@@ -156,6 +162,7 @@ public class UserStorageDaoTest {
 
     @Test
     public void testGetMutualFriendsUser() throws IncorrectIdException {
+        deleteBd();
         User user1 = createUser();
         UserStorage userStorage = new UserStorageDao(jdbcTemplate);
         userStorage.add(user1);
@@ -181,8 +188,6 @@ public class UserStorageDaoTest {
         for (int i = 3; i < 6; i++) {
             User mutualFriend = createUser();
             mutualFriend.setId(i);
-            mutualFriend.getFriends().add(1);
-            mutualFriend.getFriends().add(2);
             mutualFriends.add(mutualFriend);
         }
 
@@ -197,5 +202,14 @@ public class UserStorageDaoTest {
     private User createUser() {
         return new User(1, "user@email.com", "user_login", "user_name",
                 LocalDate.of(1990, 1, 1), new HashSet<>());
+    }
+
+    private void deleteBd() {
+        String sql = "TRUNCATE TABLE friends;";
+        jdbcTemplate.update(sql);
+        sql = "DELETE FROM users;";
+        jdbcTemplate.update(sql);
+        sql = "ALTER TABLE users ALTER COLUMN user_id RESTART WITH 1;";
+        jdbcTemplate.update(sql);
     }
 }
