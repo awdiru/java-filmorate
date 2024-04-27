@@ -18,6 +18,7 @@ public interface DaoLikes {
      *
      * @param idFilm идентификатор фильма
      * @param idUser идентификатор пользователя
+     * @return
      */
     void delLike(int idFilm, int idUser);
 

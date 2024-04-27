@@ -2,13 +2,15 @@ package ru.yandex.practicum.filmorate.controller.storage.user_impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.controller.dao.DaoFriends;
 import ru.yandex.practicum.filmorate.controller.dao.DaoUsers;
+import ru.yandex.practicum.filmorate.controller.dao.impl.DaoFriendsImpl;
+import ru.yandex.practicum.filmorate.controller.dao.impl.DaoUsersImpl;
 import ru.yandex.practicum.filmorate.controller.storage.UserStorage;
 import ru.yandex.practicum.filmorate.model.User;
 
-import java.awt.desktop.PreferencesEvent;
 import java.util.HashSet;
 import java.util.List;
 
@@ -19,10 +21,9 @@ public class UserStorageDao implements UserStorage {
     private final DaoFriends daoFriends;
 
     @Autowired
-    public UserStorageDao(@Qualifier("DaoUsersImpl") DaoUsers daoUsers,
-                          @Qualifier("DaoFriendsImpl") DaoFriends daoFriends) {
-        this.daoUsers = daoUsers;
-        this.daoFriends = daoFriends;
+    public UserStorageDao(JdbcTemplate jdbcTemplate) {
+        this.daoUsers = new DaoUsersImpl(jdbcTemplate);
+        this.daoFriends = new DaoFriendsImpl(jdbcTemplate);
     }
 
     @Override
@@ -50,6 +51,7 @@ public class UserStorageDao implements UserStorage {
     @Override
     public User add(User user) {
         if (user == null) return null;
+        if (user.getId() == null) user.setId(1);
         daoUsers.add(user);
 
         if (user.getFriends() == null) user.setFriends(new HashSet<>());

@@ -1,8 +1,8 @@
 # java-filmorate
 
-![ProjectDiargammBD.png](src/main/resources/shema.png)
+![ProjectDiargammBD.png](src/main/resources/schema.png)
 
->[SQL код базы данных](src/main/resources/shema.sql)
+>[SQL код базы данных](src/main/resources/schema.sql)
 ***
 ## Примеры запросов SQL:
 

@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
-import java.util.Set;
+import java.util.List;
 
 /**
  * Film.
@@ -27,11 +27,13 @@ public class Film {
     @AcceptableReleaseDate(message = "Ошибка добавления фильма! Дата релиза не может быть раньше 28 декабря 1895 года.")
     @EqualsAndHashCode.Exclude
     private LocalDate releaseDate;
-    @NotNull(message = "Ошибка добавления фильма! Продолжительность не может быть пустой.")
     @Positive
     @EqualsAndHashCode.Exclude
     private Integer duration;
-    @NotNull(message = "Ошибка добавления фильма! Рейтинг не может быть пустым.")
-    private Integer ratingId;
-    private Set<Integer> likes;
+    @EqualsAndHashCode.Exclude
+    private Rating mpa;
+    @EqualsAndHashCode.Exclude
+    private List<Integer> likes;
+    @EqualsAndHashCode.Exclude
+    private List<Genre> genres;
 }

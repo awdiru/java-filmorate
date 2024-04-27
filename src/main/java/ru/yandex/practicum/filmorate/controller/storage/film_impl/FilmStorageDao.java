@@ -2,13 +2,19 @@ package ru.yandex.practicum.filmorate.controller.storage.film_impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.controller.dao.DaoFilms;
+import ru.yandex.practicum.filmorate.controller.dao.DaoGenres;
 import ru.yandex.practicum.filmorate.controller.dao.DaoLikes;
+import ru.yandex.practicum.filmorate.controller.dao.impl.DaoFilmsImpl;
+import ru.yandex.practicum.filmorate.controller.dao.impl.DaoGenresImpl;
+import ru.yandex.practicum.filmorate.controller.dao.impl.DaoLikesImpl;
 import ru.yandex.practicum.filmorate.controller.storage.FilmStorage;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
 
-import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 
 @Component
@@ -17,11 +23,13 @@ public class FilmStorageDao implements FilmStorage {
     private final DaoFilms daoFilms;
     private final DaoLikes daoLikes;
 
+    private final DaoGenres daoGenres;
+
     @Autowired
-    public FilmStorageDao(@Qualifier("DaoFilmsImpl") DaoFilms daoFilms,
-                          @Qualifier("DaoLikesImpl") DaoLikes daoLikes) {
-        this.daoFilms = daoFilms;
-        this.daoLikes = daoLikes;
+    public FilmStorageDao(JdbcTemplate jdbcTemplate) {
+        this.daoFilms = new DaoFilmsImpl(jdbcTemplate);
+        this.daoLikes = new DaoLikesImpl(jdbcTemplate);
+        this.daoGenres = new DaoGenresImpl(jdbcTemplate);
     }
 
     @Override
@@ -44,18 +52,26 @@ public class FilmStorageDao implements FilmStorage {
     @Override
     public Film add(Film film) {
         if (film == null) return null;
+        if (film.getId() == null) film.setId(1);
         daoFilms.add(film);
 
-        if (film.getLikes() == null) film.setLikes(new HashSet<>());
-        if (film.getLikes().isEmpty()) return film;
+        if (film.getLikes() == null) film.setLikes(new LinkedList<>());
+        if (film.getGenres() == null) film.setGenres(new LinkedList<>());
 
-        for (Integer id : film.getLikes())
-            daoLikes.addLike(film.getId(), id);
+        if (!film.getLikes().isEmpty()) {
+            for (Integer id : film.getLikes())
+                daoLikes.addLike(film.getId(), id);
+        }
+        if (!film.getGenres().isEmpty()) {
+            for (Genre g : film.getGenres())
+                daoGenres.addGenreFilm(film.getId(), g.getId());
+        }
         return film;
     }
 
     @Override
     public Film update(Film film) {
+        film.setGenres(daoGenres.getGenresFilm(film.getId()));
         return daoFilms.update(film);
     }
 
@@ -63,18 +79,14 @@ public class FilmStorageDao implements FilmStorage {
     public Film delete(Integer id) {
         Film film = search(id);
         if (film == null) return null;
-        for (Integer idUser : film.getLikes())
-            daoLikes.delLike(film.getId(), idUser);
-
-        daoFilms.delete(id);
-        return film;
+        return daoFilms.delete(id);
     }
 
     @Override
     public Film search(int id) {
         Film film = daoFilms.search(id);
         if (film == null) return null;
-        film.setLikes(new HashSet<>(daoLikes.findAllIdUsersLikesFilm(id)));
+        film.setLikes(daoLikes.findAllIdUsersLikesFilm(id));
         return film;
     }
 

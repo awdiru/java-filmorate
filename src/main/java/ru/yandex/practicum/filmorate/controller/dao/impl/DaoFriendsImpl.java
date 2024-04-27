@@ -22,18 +22,14 @@ public class DaoFriendsImpl implements DaoFriends {
 
     @Override
     public void addFriend(int idUser, int idFriend) {
-        String sql = "insert into friends (user_id, friend_id) values (?, ?)";
-        jdbcTemplate.update(sql, idUser, idFriend);
         String sql1 = "insert into friends (user_id, friend_id) values (?, ?)";
-        jdbcTemplate.update(sql1, idFriend, idUser);
+        jdbcTemplate.update(sql1, idUser, idFriend);
     }
 
     @Override
     public void deleteFriend(int idUser, int idFriend) {
-        String sql = "delete from friends where user_id = ? and friend_id = ?";
-        jdbcTemplate.update(sql, idUser, idFriend);
         String sql1 = "delete from friends where user_id = ? and friend_id = ?";
-        jdbcTemplate.update(sql1, idFriend, idUser);
+        jdbcTemplate.update(sql1, idUser, idFriend);
     }
 
     @Override
@@ -42,7 +38,7 @@ public class DaoFriendsImpl implements DaoFriends {
             String sql = "SELECT * " +
                     "FROM  users " +
                     "WHERE user_id IN (SELECT friend_id FROM friends WHERE user_id = ?);";
-            return jdbcTemplate.query(sql, (rs, rowNum) -> DaoExample.makeUser(rs, jdbcTemplate), idUser);
+            return jdbcTemplate.query(sql, (rs, rowNum) -> DaoFactoryModel.makeUser(rs, jdbcTemplate), idUser);
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
@@ -54,7 +50,7 @@ public class DaoFriendsImpl implements DaoFriends {
             String sql = "SELECT * FROM users " +
                     "WHERE user_id IN (SELECT friend_id FROM friends WHERE user_id = ?) " +
                     "AND user_id IN (SELECT friend_id FROM friends WHERE user_id = ?)";
-            return jdbcTemplate.query(sql, (rs, rowNum) -> DaoExample.makeUser(rs, jdbcTemplate), idUser, idFriend);
+            return jdbcTemplate.query(sql, (rs, rowNum) -> DaoFactoryModel.makeUser(rs, jdbcTemplate), idUser, idFriend);
         } catch (EmptyResultDataAccessException e) {
             return null;
         }

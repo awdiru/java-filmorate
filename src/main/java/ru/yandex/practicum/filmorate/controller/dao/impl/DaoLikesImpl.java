@@ -22,7 +22,7 @@ public class DaoLikesImpl implements DaoLikes {
     }
 
     @Override
-    public void addLike(int idFilm, int idUser) {
+    public void  addLike(int idFilm, int idUser) {
         String sql = "INSERT INTO likes (film_id, user_id) VALUES (?, ?)";
         jdbcTemplate.update(sql, idFilm, idUser);
     }
@@ -47,12 +47,12 @@ public class DaoLikesImpl implements DaoLikes {
     public List<Film> getPop(int n) {
         String sql = "SELECT f.film_id, f.name, f.description, f.release_date, f.duration, f.rating_id " +
                 "FROM likes l " +
-                "JOIN films f ON f.film_id = l.film_is " +
+                "JOIN films f ON f.film_id = l.film_id " +
                 "GROUP BY l.film_id " +
                 "ORDER BY COUNT(l.user_id) DESC " +
                 "LIMIT ?";
         try {
-            return jdbcTemplate.query(sql, (rs, rowNum) -> DaoExample.makeFilm(rs, jdbcTemplate), n);
+            return jdbcTemplate.query(sql, (rs, rowNum) -> DaoFactoryModel.makeFilm(rs, jdbcTemplate), n);
         } catch (EmptyResultDataAccessException e) {
             return new ArrayList<>();
         }

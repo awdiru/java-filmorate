@@ -29,13 +29,14 @@ public class DaoFilmsImpl implements DaoFilms {
         values.put("description", film.getDescription());
         values.put("release_date", film.getReleaseDate());
         values.put("duration", film.getDuration());
-        values.put("rating_id", film.getRatingId());
+        values.put("rating_id", film.getMpa().getId());
 
         SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("films")
                 .usingGeneratedKeyColumns("film_id");
 
         film.setId(simpleJdbcInsert.executeAndReturnKey(values).intValue());
+
         return film;
     }
 
@@ -49,7 +50,7 @@ public class DaoFilmsImpl implements DaoFilms {
                 film.getDescription(),
                 film.getReleaseDate(),
                 film.getDuration(),
-                film.getRatingId(),
+                film.getMpa().getId(),
                 film.getId());
         return film;
     }
@@ -66,7 +67,7 @@ public class DaoFilmsImpl implements DaoFilms {
     public Film search(Integer id) {
         String sql = "SELECT * FROM films WHERE film_id = ?";
         try {
-            return jdbcTemplate.queryForObject(sql, (rs, num) -> DaoExample.makeFilm(rs, jdbcTemplate), id);
+            return jdbcTemplate.queryForObject(sql, (rs, num) -> DaoFactoryModel.makeFilm(rs, jdbcTemplate), id);
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
@@ -76,7 +77,7 @@ public class DaoFilmsImpl implements DaoFilms {
     public List<Film> findAll() {
         String sql = "SELECT * FROM films";
         try {
-            return jdbcTemplate.query(sql, (rs, num) -> DaoExample.makeFilm(rs, jdbcTemplate));
+            return jdbcTemplate.query(sql, (rs, num) -> DaoFactoryModel.makeFilm(rs, jdbcTemplate));
         } catch (EmptyResultDataAccessException e) {
             return new ArrayList<>();
         }

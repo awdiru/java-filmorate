@@ -53,7 +53,7 @@ public class FilmStorageInMemory implements FilmStorage {
     public Film add(Film film) {
         film.setId(generateID);
         if (film.getLikes() == null)
-            film.setLikes(new HashSet<>());
+            film.setLikes(new LinkedList<>());
         films.put(generateID++, film);
         return film;
     }
@@ -63,7 +63,7 @@ public class FilmStorageInMemory implements FilmStorage {
         if (!films.containsKey(film.getId()))
             return null;
         if (film.getLikes() == null)
-            film.setLikes(new HashSet<>());
+            film.setLikes(new LinkedList<>());
 
         films.put(film.getId(), film);
         return film;

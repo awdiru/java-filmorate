@@ -6,7 +6,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.controller.dao.DaoFriends;
 import ru.yandex.practicum.filmorate.controller.dao.DaoUsers;
 import ru.yandex.practicum.filmorate.model.User;
 
@@ -16,12 +15,10 @@ import java.util.*;
 @Qualifier("DaoUsersImpl")
 public class DaoUsersImpl implements DaoUsers {
     private final JdbcTemplate jdbcTemplate;
-    private final DaoFriends daoFriends;
 
     @Autowired
-    public DaoUsersImpl(JdbcTemplate jdbcTemplate, @Qualifier("DaoFriendsImpl") DaoFriends daoFriends) {
+    public DaoUsersImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
-        this.daoFriends = daoFriends;
     }
 
     @Override
@@ -68,7 +65,7 @@ public class DaoUsersImpl implements DaoUsers {
     public User search(int id) {
         String sql = "SELECT * FROM users WHERE user_id = ?";
         try {
-            return jdbcTemplate.queryForObject(sql, (rs, num) -> DaoExample.makeUser(rs, jdbcTemplate), id);
+            return jdbcTemplate.queryForObject(sql, (rs, num) -> DaoFactoryModel.makeUser(rs, jdbcTemplate), id);
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
@@ -78,7 +75,7 @@ public class DaoUsersImpl implements DaoUsers {
     public List<User> findAll() {
         String sql = "SELECT * FROM users";
         try {
-            return jdbcTemplate.query(sql, (rs, num) -> DaoExample.makeUser(rs, jdbcTemplate));
+            return jdbcTemplate.query(sql, (rs, num) -> DaoFactoryModel.makeUser(rs, jdbcTemplate));
         } catch (EmptyResultDataAccessException e) {
             return null;
         }

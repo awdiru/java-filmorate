@@ -27,7 +27,13 @@ public class FilmController {
 
     @PostMapping
     public Film add(@RequestBody @Valid Film film) {
-        return filmService.add(film);
+        try {
+            return filmService.add(film);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Ошибка добавления фильма! Переданы некорректные данные.");
+
+        }
     }
 
     @PutMapping
@@ -87,7 +93,7 @@ public class FilmController {
         return film;
     }
 
-    @GetMapping("/popular/{id}")
+    @GetMapping("/popular")
     public List<Film> popFilms(@RequestParam(defaultValue = "10") int count) {
         return filmService.popFilms(count);
     }
