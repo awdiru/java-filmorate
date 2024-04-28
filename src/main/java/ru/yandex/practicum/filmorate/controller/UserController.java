@@ -2,52 +2,113 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exceptions.BadRequestException;
-import ru.yandex.practicum.filmorate.exceptions.InternalServerErrorRequestException;
+import org.springframework.web.server.ResponseStatusException;
+import ru.yandex.practicum.filmorate.controller.service.UserService;
+import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
 import ru.yandex.practicum.filmorate.model.User;
 
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 @Slf4j
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    private final Map<Integer, User> users = new HashMap<>();
-    private int generateId = 1;
+    private final UserService userService;
+
+    @Autowired
+    public UserController(@Qualifier("UserServiceImpl") UserService userService) {
+        this.userService = userService;
+    }
 
     @PostMapping
-    public User add(@RequestBody @Valid User user) throws BadRequestException {
-        if (users.containsValue(user)) {
-            log.info("Ошибка добавления пользователя! Пользователь с указанным email уже существует");
-            throw new BadRequestException();
-        }
-        if (user.getName() == null)
-            user.setName(user.getLogin());
-
-        user.setId(generateId++);
-        users.put(user.getId(), user);
-        log.info("Добавлен новый пользователь. ID = " + user.getId());
-        return user;
+    public User add(@RequestBody @Valid User user) {
+        return userService.add(user);
     }
 
     @PutMapping
-    public User update(@RequestBody @Valid User user) throws InternalServerErrorRequestException {
-        if (!users.containsKey(user.getId())) {
-            log.info("Ошибка обновления пользователя! Запрашиваемый id = " + user.getId() + " отсутствует.");
-            throw new InternalServerErrorRequestException();
+    public User update(@RequestBody @Valid User user) {
+        try {
+            return userService.update(user);
+        } catch (IncorrectIdException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Ошибка обновления пользователя! " + e.getMessage());
         }
-        users.put(user.getId(), user);
-        log.info("Пользователь обновлен. ID = " + user.getId());
-        return user;
+    }
+
+    @DeleteMapping("/{id}")
+    public User delete(@PathVariable Integer id) {
+        try {
+            return userService.delete(id);
+        } catch (IncorrectIdException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Ошибка удаления фильма! " + e.getMessage());
+        }
     }
 
     @GetMapping
-    public ArrayList<User> findAll() {
-        return new ArrayList<>(users.values());
+    public List<User> findAll() {
+        return userService.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public User search(@PathVariable int id) {
+        try {
+            return userService.search(id);
+        } catch (IncorrectIdException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Ошибка поиска пользователя! " + e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}/friends/{friendId}")
+    public User addFriend(@PathVariable int id, @PathVariable int friendId) {
+        User user;
+        try {
+            user = userService.addFriend(id, friendId);
+        } catch (IncorrectIdException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Ошибка добавления друга! " + e.getMessage());
+        }
+        return user;
+    }
+
+    @DeleteMapping("/{id}/friends/{friendId}")
+    public User deleteFriend(@PathVariable int id, @PathVariable int friendId) {
+        User user;
+        try {
+            user = userService.deleteFriend(id, friendId);
+        } catch (IncorrectIdException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Ошибка удаления друга! " + e.getMessage());
+        }
+        return user;
+    }
+
+    @GetMapping("/{id}/friends")
+    public List<User> getFriends(@PathVariable int id) {
+        List<User> getFriends;
+        try {
+            getFriends = userService.getFriends(id);
+        } catch (IncorrectIdException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Ошибка возвращения списка друзей! " + e.getMessage());
+        }
+        return getFriends;
+    }
+
+    @GetMapping("/{id}/friends/common/{otherId}")
+    public List<User> getMutualFriends(@PathVariable int id, @PathVariable int otherId) {
+        try {
+            return userService.getMutualFriends(id, otherId);
+        } catch (IncorrectIdException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Ошибка возвращения списка общих друзей! " + e.getMessage());
+        }
     }
 }
