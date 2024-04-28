@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.controller.storage;
 
-import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.List;
@@ -12,9 +11,8 @@ public interface FilmStorage {
      * @param idFilm идентификатор фильма
      * @param idUser идентификатор пользователя
      * @return обновленный фильм
-     * @throws IncorrectIdException некорректный идентификатор
      */
-    Film addLike(int idFilm, int idUser) throws IncorrectIdException;
+    Film addLike(int idFilm, int idUser);
 
     /**
      * Удалить лайк у фильма
@@ -22,9 +20,8 @@ public interface FilmStorage {
      * @param idFilm идентификатор фильма
      * @param idUser идентификатор пользователя
      * @return обновленный фильм
-     * @throws IncorrectIdException некорректный идентификатор
      */
-    Film delLike(int idFilm, int idUser) throws IncorrectIdException;
+    Film deleteLike(int idFilm, int idUser);
 
     /**
      * Список N самых популярных фильмов
@@ -32,7 +29,7 @@ public interface FilmStorage {
      * @param n количество фильмов
      * @return список фильмов
      */
-    List<Film> popFilms(int n);
+    List<Film> getNPopularFilms(int n);
 
     /**
      * Добавить фильм
@@ -48,7 +45,7 @@ public interface FilmStorage {
      * @param film обновляемый фильм
      * @return обновленный фильм
      */
-    Film update(Film film) throws IncorrectIdException;
+    Film update(Film film);
 
     /**
      * Удалить фильм
@@ -56,7 +53,7 @@ public interface FilmStorage {
      * @param id идентификатор удаляемого фильма
      * @return удаленный фильм
      */
-    Film delete(Integer id) throws IncorrectIdException;
+    Film delete(Integer id);
 
     /**
      * Найти фильм
@@ -64,7 +61,7 @@ public interface FilmStorage {
      * @param id идентификатор фильма
      * @return найденный фильм или null
      */
-    Film search(int id) throws IncorrectIdException;
+    Film search(int id);
 
     /**
      * Вернуть список всех фильмов

@@ -39,13 +39,13 @@ public class FilmStorageDao implements FilmStorage {
     }
 
     @Override
-    public Film delLike(int idFilm, int idUser) {
+    public Film deleteLike(int idFilm, int idUser) {
         daoLikes.delLike(idFilm, idUser);
         return search(idFilm);
     }
 
     @Override
-    public List<Film> popFilms(int n) {
+    public List<Film> getNPopularFilms(int n) {
         return daoLikes.getPop(n);
     }
 

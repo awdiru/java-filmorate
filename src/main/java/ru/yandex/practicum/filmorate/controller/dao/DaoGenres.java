@@ -31,7 +31,7 @@ public interface DaoGenres {
      * Получить список жанров фильма
      *
      * @param idFilm идентификатор фильма
-     * @return
+     * @return список всех жанров фильма
      */
     List<Genre> getGenresFilm(Integer idFilm);
 }

@@ -130,7 +130,7 @@ public class FilmStorageDaoTest {
         userStorage.add(user);
 
         filmStorage.addLike(1, 1);
-        filmStorage.delLike(1, 1);
+        filmStorage.deleteLike(1, 1);
 
         Film sevedFilm = filmStorage.search(1);
         assertThat(sevedFilm)

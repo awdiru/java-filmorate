@@ -3,7 +3,6 @@ package ru.yandex.practicum.filmorate.controller.storage.film_impl;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.controller.storage.FilmStorage;
-import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.*;
@@ -29,7 +28,7 @@ public class FilmStorageInMemory implements FilmStorage {
     }
 
     @Override
-    public Film delLike(int idFilm, int idUser) {
+    public Film deleteLike(int idFilm, int idUser) {
         Film film = films.get(idFilm);
         if (film == null) return null;
         film.getLikes().remove(idUser);
@@ -37,7 +36,7 @@ public class FilmStorageInMemory implements FilmStorage {
     }
 
     @Override
-    public List<Film> popFilms(int n) {
+    public List<Film> getNPopularFilms(int n) {
         return films.values().stream()
                 .filter(film -> !film.getLikes().isEmpty())
                 .sorted((Film film1,Film film2) -> {
@@ -70,7 +69,7 @@ public class FilmStorageInMemory implements FilmStorage {
     }
 
     @Override
-    public Film delete(Integer id) throws IncorrectIdException {
+    public Film delete(Integer id) {
         return films.remove(id);
     }
 

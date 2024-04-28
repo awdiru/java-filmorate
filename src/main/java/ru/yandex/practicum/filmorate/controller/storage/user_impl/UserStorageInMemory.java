@@ -3,7 +3,6 @@ package ru.yandex.practicum.filmorate.controller.storage.user_impl;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.controller.storage.UserStorage;
-import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.*;
@@ -84,7 +83,7 @@ public class UserStorageInMemory implements UserStorage {
     }
 
     @Override
-    public User delete(Integer id) throws IncorrectIdException {
+    public User delete(Integer id) {
         return users.remove(id);
     }
 

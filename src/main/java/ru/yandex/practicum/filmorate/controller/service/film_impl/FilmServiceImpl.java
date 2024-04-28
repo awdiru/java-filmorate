@@ -35,12 +35,12 @@ public class FilmServiceImpl implements FilmService {
     public Film delLike(int idFilm, int idUser) throws IncorrectIdException {
         search(idFilm);
         userService.search(idUser);
-        return filmStorage.delLike(idFilm, idUser);
+        return filmStorage.deleteLike(idFilm, idUser);
     }
 
     @Override
-    public List<Film> popFilms(int n) {
-        return filmStorage.popFilms(n);
+    public List<Film> getNPopularFilms(int n) {
+        return filmStorage.getNPopularFilms(n);
     }
 
     @Override

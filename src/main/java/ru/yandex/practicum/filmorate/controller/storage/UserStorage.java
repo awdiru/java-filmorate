@@ -22,18 +22,16 @@ public interface UserStorage {
      * @param idUser   идентификатор пользователя
      * @param idFriend идентификатор друга
      * @return обновленный пользователь
-     * @throws IncorrectIdException некорректный идентификатор
      */
-    User deleteFriend(int idUser, int idFriend) throws IncorrectIdException;
+    User deleteFriend(int idUser, int idFriend);
 
     /**
      * Список друзей пользователя
      *
      * @param id идентификатор пользователя
      * @return список друзей
-     * @throws IncorrectIdException некорректный идентификатор
      */
-    List<User> getFriends(int id) throws IncorrectIdException;
+    List<User> getFriends(int id);
 
     /**
      * Список общих друзей
@@ -41,9 +39,8 @@ public interface UserStorage {
      * @param idUser   идентификатор пользователя
      * @param idFriend идентификатор друга
      * @return список общих друзей
-     * @throws IncorrectIdException некорректный идентификатор
      */
-    List<User> getMutualFriends(int idUser, int idFriend) throws IncorrectIdException;
+    List<User> getMutualFriends(int idUser, int idFriend);
 
     /**
      * Добавить пользователя
@@ -59,7 +56,7 @@ public interface UserStorage {
      * @param user обновляемый пользователь
      * @return обновленный пользователь
      */
-    User update(User user) throws IncorrectIdException;
+    User update(User user);
 
     /**
      * Удалить пользователя
@@ -67,7 +64,7 @@ public interface UserStorage {
      * @param id идентификатор удаляемого пользователя
      * @return удаленный пользователь
      */
-    User delete(Integer id) throws IncorrectIdException;
+    User delete(Integer id);
 
     /**
      * Найти пользователя
@@ -75,7 +72,7 @@ public interface UserStorage {
      * @param id идентификатор пользователя
      * @return найденный пользователь или null
      */
-    User search(int id) throws IncorrectIdException;
+    User search(int id);
 
     /**
      * Вернуть список всех пользователей
