@@ -5,10 +5,17 @@ import ru.yandex.practicum.filmorate.model.Film;
 import java.util.List;
 
 public interface DaoFilms {
+    /**
+     * Добавить фильм
+     *
+     * @param film добавляемый фильм
+     * @return добавленный фильм
+     */
     Film add(Film film);
 
     /**
      * Обновить фильм
+     *
      * @param film обновляемый фильм
      * @return обновленный фильм
      */
@@ -16,6 +23,7 @@ public interface DaoFilms {
 
     /**
      * Удалить фильм
+     *
      * @param id идентификатор удаляемого фильма
      * @return удаленный фильм
      */
@@ -23,6 +31,7 @@ public interface DaoFilms {
 
     /**
      * Найти фильм
+     *
      * @param id идентификатор фильма
      * @return найденный фильм или null
      */
@@ -30,6 +39,7 @@ public interface DaoFilms {
 
     /**
      * Вернуть список всех фильмов
+     *
      * @return список всех фильмов
      */
     List<Film> findAll();
