@@ -3,6 +3,8 @@ package ru.yandex.practicum.filmorate.controller.dao;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public interface DaoLikes {
     /**
@@ -37,4 +39,11 @@ public interface DaoLikes {
      * @return список популярных фильмов
      */
     List<Film> getPop(int n);
+
+    /**
+     * Вернуть список идентификаторов пользователей с их лайками
+     *
+     * @return список лайков
+     */
+    Map<Integer, Set<Integer>> getAllUserIdWithLikes();
 }

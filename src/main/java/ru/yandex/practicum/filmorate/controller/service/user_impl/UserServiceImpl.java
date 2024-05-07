@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.controller.service.UserService;
 import ru.yandex.practicum.filmorate.controller.storage.UserStorage;
 import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
+import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.List;
@@ -76,5 +77,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findAll() {
         return userStorage.findAll();
+    }
+
+    @Override
+    public List<Film> getRecommendations(int id) throws IncorrectIdException {
+        search(id);
+        return userStorage.getRecommendations(id);
     }
 }

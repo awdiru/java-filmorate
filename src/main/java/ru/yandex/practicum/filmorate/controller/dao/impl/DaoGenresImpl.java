@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import ru.yandex.practicum.filmorate.controller.dao.DaoGenres;
+import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 
 import java.util.ArrayList;
@@ -52,5 +53,22 @@ public class DaoGenresImpl implements DaoGenres {
         } catch (EmptyResultDataAccessException e) {
             return new ArrayList<>();
         }
+    }
+
+    @Override
+    public Film updateGenresFilm(Film film) {
+        if (!(film.getGenres() == null)) {
+            String sqlDelGenres = "DELETE FROM film_genre WHERE film_id = ?";
+            jdbcTemplate.update(sqlDelGenres, film.getId());
+
+            for (Genre g : film.getGenres()) {
+                addGenreFilm(film.getId(), g.getId());
+            }
+            String sql = "SELECT * FROM genres WHERE genre_id IN (" +
+                    "SELECT genre_id FROM film_genre WHERE film_id = ?)";
+            List<Genre> genres = jdbcTemplate.query(sql, ((rs, rowNum) -> DaoFactoryModel.makeGenre(rs)), film.getId());
+            film.setGenres(genres);
+        }
+        return film;
     }
 }

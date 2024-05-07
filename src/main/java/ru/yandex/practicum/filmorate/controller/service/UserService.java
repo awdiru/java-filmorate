@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.controller.service;
 
 import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
+import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.List;
@@ -83,4 +84,12 @@ public interface UserService {
      * @return список всех пользователей
      */
     List<User> findAll();
+
+    /**
+     * Показать рекомендации по фильмам для пользователя
+     *
+     * @param id идентификатор пользователя
+     * @return список рекомендованных фильмов
+     */
+    List<Film> getRecommendations(int id) throws IncorrectIdException;
 }

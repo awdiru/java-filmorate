@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.controller.dao.DaoFilms;
+import ru.yandex.practicum.filmorate.controller.dao.DaoGenres;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.*;
@@ -15,10 +16,12 @@ import java.util.*;
 @Qualifier("DaoFilmsImpl")
 public class DaoFilmsImpl implements DaoFilms {
     private final JdbcTemplate jdbcTemplate;
+    private final DaoGenres daoGenres;
 
     @Autowired
     public DaoFilmsImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
+        this.daoGenres = new DaoGenresImpl(jdbcTemplate);
     }
 
     @Override
@@ -52,7 +55,8 @@ public class DaoFilmsImpl implements DaoFilms {
                 film.getDuration(),
                 film.getMpa().getId(),
                 film.getId());
-        return film;
+
+        return daoGenres.updateGenresFilm(film);
     }
 
     @Override
