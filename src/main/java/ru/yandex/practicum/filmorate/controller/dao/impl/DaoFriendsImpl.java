@@ -22,13 +22,13 @@ public class DaoFriendsImpl implements DaoFriends {
 
     @Override
     public void addFriend(int idUser, int idFriend) {
-        String sql1 = "insert into friends (user_id, friend_id) values (?, ?)";
+        String sql1 = "INSERT INTO friends (user_id, friend_id) values (?, ?)";
         jdbcTemplate.update(sql1, idUser, idFriend);
     }
 
     @Override
     public void deleteFriend(int idUser, int idFriend) {
-        String sql1 = "delete from friends where user_id = ? and friend_id = ?";
+        String sql1 = "DELETE FROM friends where user_id = ? AND friend_id = ?";
         jdbcTemplate.update(sql1, idUser, idFriend);
     }
 
