@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
 import org.springframework.web.server.ResponseStatusException;
 import ru.yandex.practicum.filmorate.controller.service.FilmService;
 import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
@@ -32,7 +31,6 @@ public class FilmController {
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "Ошибка добавления фильма! Переданы некорректные данные.");
-
         }
     }
 
@@ -96,5 +94,11 @@ public class FilmController {
     @GetMapping("/popular")
     public List<Film> popFilms(@RequestParam(defaultValue = "10") int count) {
         return filmService.getNPopularFilms(count);
+    }
+
+    @GetMapping("/director/{directorId}")
+    public List<Film> getFilmsByDirector(@PathVariable("directorId") Integer directorId,
+                                         @RequestParam String sortBy) throws IncorrectIdException {
+        return filmService.getFilmsByDirector(directorId, sortBy);
     }
 }

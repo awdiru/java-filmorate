@@ -1,10 +1,7 @@
 package ru.yandex.practicum.filmorate.controller.dao.impl;
 
 import org.springframework.jdbc.core.JdbcTemplate;
-import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.model.Rating;
-import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.model.*;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -30,7 +27,11 @@ public class DaoFactoryModel {
                 "(SELECT genre_id FROM film_genre WHERE film_id = ? ORDER BY genre_id)";
         List<Genre> genres = jdbcTemplate.query(sqlGenres, (rs, rowNum) -> makeGenre(rs), filmId);
 
-        return new Film(filmId, name, description, releaseDate, duration, rating, likes, genres);
+        String sqlDirectors = "SELECT * FROM directors WHERE director_id IN " +
+                "(SELECT director_id FROM film_director WHERE film_id = ? ORDER BY director_id)";
+        List<Director> directors = jdbcTemplate.query(sqlDirectors, (rs, rowNum) -> makeDirector(rs), filmId);
+
+        return new Film(filmId, name, description, releaseDate, duration, rating, likes, genres, directors);
     }
 
     static User makeUser(ResultSet resultSet, JdbcTemplate jdbcTemplate) throws SQLException {
@@ -56,5 +57,11 @@ public class DaoFactoryModel {
         Integer id = resultSet.getInt("rating_id");
         String name = resultSet.getString("name");
         return new Rating(id, name);
+    }
+
+    static Director makeDirector(ResultSet resultSet) throws SQLException {
+        Integer id = resultSet.getInt("director_id");
+        String name = resultSet.getString("name");
+        return new Director(id, name);
     }
 }

@@ -82,4 +82,9 @@ public class FilmStorageInMemory implements FilmStorage {
     public List<Film> findAll() {
         return List.copyOf(films.values());
     }
+
+    @Override
+    public List<Film> getFilmsByDirector(Integer directorId, String sortBy) {
+        return List.of();
+    }
 }

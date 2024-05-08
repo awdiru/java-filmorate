@@ -37,4 +37,6 @@ public class Film {
     private List<Integer> likes;
     @EqualsAndHashCode.Exclude
     private List<Genre> genres;
+    @EqualsAndHashCode.Exclude
+    private List<Director> directors;
 }

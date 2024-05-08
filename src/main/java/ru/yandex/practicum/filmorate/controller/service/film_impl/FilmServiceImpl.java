@@ -72,4 +72,13 @@ public class FilmServiceImpl implements FilmService {
     public List<Film> findAll() {
         return filmStorage.findAll();
     }
+
+    @Override
+    public List<Film> getFilmsByDirector(Integer directorId, String sortBy) throws IncorrectIdException {
+        List<Film> films = filmStorage.getFilmsByDirector(directorId, sortBy);
+        if (films.isEmpty()) {
+            throw new IncorrectIdException("У режиссера с ID " + directorId + " фильмы не найдены.");
+        }
+        return films;
+    }
 }

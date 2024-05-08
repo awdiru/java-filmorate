@@ -6,7 +6,9 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.controller.dao.DaoDirectors;
 import ru.yandex.practicum.filmorate.controller.dao.DaoFilms;
+import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.*;
@@ -80,6 +82,39 @@ public class DaoFilmsImpl implements DaoFilms {
             return jdbcTemplate.query(sql, (rs, num) -> DaoFactoryModel.makeFilm(rs, jdbcTemplate));
         } catch (EmptyResultDataAccessException e) {
             return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public List<Film> getFilmsByDirector(Integer directorId, String sortBy) throws IncorrectIdException {
+        try {
+            DaoDirectors daoDirectors = new DaoDirectorsImpl(jdbcTemplate);
+            daoDirectors.getById(directorId);
+            String sql;
+            if (sortBy.equals("year")) {
+                sql = "SELECT f.film_id, f.name, f.description, f.release_date, f.duration, f.rating_id, r.name " +
+                        "FROM films AS f " +
+                        "JOIN ratings AS r ON f.rating_id = r.rating_id " +
+                        "JOIN film_director AS fd ON f.film_id = fd.film_id " +
+                        "WHERE fd.director_id = ? " +
+                        "ORDER BY release_date ";
+                return jdbcTemplate.query(sql, (rs, num) -> DaoFactoryModel.makeFilm(rs, jdbcTemplate));
+            }
+            if (sortBy.equals("likes")) {
+                sql = "SELECT f.film_id, f.name, f.description, f.release_date, f.duration, f.rating_id, r.name, " +
+                        "COUNT(fl.user_id) AS likes_count " +
+                        "FROM films AS f " +
+                        "JOIN ratings AS r ON f.rating_id = r.rating_id " +
+                        "JOIN film_director AS fd ON f.film_id = fd.film_id " +
+                        "LEFT JOIN film_like AS fl ON f.film_id = fl.film_id " +
+                        "WHERE fd.director_id = ? " +
+                        "GROUP BY f.film_id " +
+                        "ORDER BY likes_count DESC ";
+                return jdbcTemplate.query(sql, (rs, num) -> DaoFactoryModel.makeFilm(rs, jdbcTemplate));
+            }
+            return new ArrayList<>();
+        } catch (EmptyResultDataAccessException e) {
+            throw new IncorrectIdException("Режиссер не найден");
         }
     }
 }

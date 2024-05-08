@@ -72,4 +72,11 @@ public interface FilmService {
      * @return список всех фильмов
      */
     List<Film> findAll();
+
+    /**
+     * Вернуть список фильмов режиссера, отсортированных по количеству лайков или году выпуска
+     *
+     * @return список фильмов режиссера, отсортированных по количеству лайков или году выпуска
+     */
+    List<Film> getFilmsByDirector(Integer directorId, String sortBy) throws IncorrectIdException;
 }
