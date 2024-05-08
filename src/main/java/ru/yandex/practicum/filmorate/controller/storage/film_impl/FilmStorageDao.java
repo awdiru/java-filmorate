@@ -71,7 +71,6 @@ public class FilmStorageDao implements FilmStorage {
 
     @Override
     public Film update(Film film) {
-        //film.setGenres(daoGenres.getGenresFilm(film.getId()));
         return daoFilms.update(film);
     }
 
