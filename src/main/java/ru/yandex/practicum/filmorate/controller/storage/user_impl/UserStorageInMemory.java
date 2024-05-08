@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.controller.storage.user_impl;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.controller.storage.UserStorage;
+import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.*;
@@ -95,5 +96,10 @@ public class UserStorageInMemory implements UserStorage {
     @Override
     public List<User> findAll() {
         return List.copyOf(users.values());
+    }
+
+    @Override
+    public List<Film> getRecommendations(int id) {
+        return null;
     }
 }

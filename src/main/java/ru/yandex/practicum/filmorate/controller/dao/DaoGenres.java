@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.controller.dao;
 
+import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 
 import java.util.List;
@@ -7,7 +8,8 @@ import java.util.List;
 public interface DaoGenres {
     /**
      * Добавить жанр фильму
-     * @param idFilm идентификатор фильма
+     *
+     * @param idFilm  идентификатор фильма
      * @param idGenre идентификатор жанра
      */
     void addGenreFilm(Integer idFilm, Integer idGenre);
@@ -34,4 +36,12 @@ public interface DaoGenres {
      * @return список всех жанров фильма
      */
     List<Genre> getGenresFilm(Integer idFilm);
+
+    /**
+     * Обновляет все жанры фильма
+     *
+     * @param film фильм
+     * @return обновленный фильм
+     */
+    Film updateGenresFilm(Film film);
 }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ru.yandex.practicum.filmorate.controller.service.UserService;
 import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
+import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 
 
@@ -61,7 +62,7 @@ public class UserController {
         try {
             return userService.search(id);
         } catch (IncorrectIdException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
                     "Ошибка поиска пользователя! " + e.getMessage());
         }
     }
@@ -107,8 +108,18 @@ public class UserController {
         try {
             return userService.getMutualFriends(id, otherId);
         } catch (IncorrectIdException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
                     "Ошибка возвращения списка общих друзей! " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/{id}/recommendations")
+    public List<Film> getRecommendations(@PathVariable int id) {
+        try {
+            return userService.getRecommendations(id);
+        } catch (IncorrectIdException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Ошибка возвращения списка рекомендаций! " + e.getMessage());
         }
     }
 }
