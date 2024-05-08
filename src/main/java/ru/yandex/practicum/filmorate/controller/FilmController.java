@@ -37,7 +37,8 @@ public class FilmController {
     @PutMapping
     public Film update(@RequestBody @Valid Film film) {
         try {
-            return filmService.update(film);
+            Film result = filmService.update(film);
+            return result;
         } catch (IncorrectIdException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
                     "Ошибка Обновления фильма! " + e.getMessage());
@@ -99,6 +100,11 @@ public class FilmController {
     @GetMapping("/director/{directorId}")
     public List<Film> getFilmsByDirector(@PathVariable("directorId") Integer directorId,
                                          @RequestParam String sortBy) throws IncorrectIdException {
-        return filmService.getFilmsByDirector(directorId, sortBy);
+        try {
+            return filmService.getFilmsByDirector(directorId, sortBy);
+        } catch (IncorrectIdException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Режиссер с указанным id отсутствует в базе! " + e.getMessage());
+        }
     }
 }

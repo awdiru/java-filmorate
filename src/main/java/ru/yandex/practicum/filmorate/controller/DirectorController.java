@@ -26,9 +26,9 @@ public class DirectorController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Director addDirectorFilm(@Valid @RequestBody Director director) {
+    public Director createDirector(@Valid @RequestBody Director director) {
         log.info("Создание режиссера: {}", director);
-        return directorService.addDirectorFilm(director);
+        return directorService.createDirector(director);
     }
 
     @PutMapping

@@ -11,7 +11,7 @@ public interface DirectorService {
      *
      * @param director объект-режиссер
      */
-    Director addDirectorFilm(Director director);
+    Director createDirector(Director director);
 
     /**
      * Обновить режиссера

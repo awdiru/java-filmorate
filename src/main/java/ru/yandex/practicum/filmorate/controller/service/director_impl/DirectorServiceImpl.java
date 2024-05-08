@@ -21,8 +21,8 @@ public class DirectorServiceImpl implements DirectorService {
     }
 
     @Override
-    public Director addDirectorFilm(Director director) {
-        return directorStorage.addDirectorFilm(director);
+    public Director createDirector(Director director) {
+        return directorStorage.createDirector(director);
     }
 
     @Override

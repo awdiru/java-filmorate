@@ -10,7 +10,15 @@ public interface DaoDirectors {
      *
      * @param director объект-режиссер
      */
-    Director addDirectorFilm(Director director);
+    Director createDirector(Director director);
+
+    /**
+     * Добавление режиссера фильму
+     *
+     * @param filmId id фильма
+     * @param directors список режиссеров
+     */
+    void addFilmDirectors(Integer filmId, List<Director> directors);
 
     /**
      * Обновить режиссера
@@ -18,6 +26,14 @@ public interface DaoDirectors {
      * @param director объект-режиссер
      */
     Director updateDirector(Director director);
+
+    /**
+     * Обновить режиссеров для фильма
+     *
+     * @param filmId id фильма
+     * @param directors список режиссеров
+     */
+    void updateFilmDirectors(Integer filmId, List<Director> directors);
 
     /**
      * Получить имя режиссера по идентификатору

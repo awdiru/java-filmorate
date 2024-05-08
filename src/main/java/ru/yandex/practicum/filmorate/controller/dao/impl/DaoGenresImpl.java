@@ -72,6 +72,8 @@ public class DaoGenresImpl implements DaoGenres {
                     "SELECT genre_id FROM film_genre WHERE film_id = ?)";
             List<Genre> genres = jdbcTemplate.query(sql, ((rs, rowNum) -> DaoFactoryModel.makeGenre(rs)), film.getId());
             film.setGenres(genres);
+        } else {
+            film.setGenres(new ArrayList<>()); // TODO добавлено, иначе не проходил мой тест
         }
         return film;
     }

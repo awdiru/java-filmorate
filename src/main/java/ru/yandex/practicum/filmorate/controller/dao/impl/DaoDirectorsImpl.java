@@ -9,10 +9,8 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.controller.dao.DaoDirectors;
-import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
 import ru.yandex.practicum.filmorate.model.Director;
 
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -29,7 +27,7 @@ public class DaoDirectorsImpl implements DaoDirectors {
     }
 
     @Override
-    public Director addDirectorFilm(Director director) {
+    public Director createDirector(Director director) {
         String sql = "INSERT INTO directors (name) VALUES (?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -49,12 +47,38 @@ public class DaoDirectorsImpl implements DaoDirectors {
         String sql = "UPDATE directors SET name = ? WHERE director_id = ?";
         try {
             int updatedRow = jdbcTemplate.update(sql, director.getName(), director.getId());
-            if(updatedRow > 0) {
+            if (updatedRow > 0) {
                 return director;
             }
             return null;
         } catch (DataAccessException e) {
             return null;
+        }
+    }
+
+    @Override
+    public void updateFilmDirectors(Integer filmId, List<Director> directors) {
+        String sqlClean = "DELETE FROM film_director " +
+                "WHERE film_id = ?";
+        jdbcTemplate.update(sqlClean, filmId);
+        addFilmDirectors(filmId, directors);
+    }
+
+    @Override
+    public void addFilmDirectors(Integer filmId, List<Director> directors) {
+        if (directors != null && !directors.isEmpty()) {
+            String sqlInsert = "INSERT INTO film_director (film_id, director_id) VALUES (?, ?)";
+
+            for (int i = 1; i < directors.size(); i++) {
+                sqlInsert = sqlInsert + ", (?, ?)";
+            }
+
+            Integer[] params = new Integer[directors.size() * 2];
+            for (int i = 0; i < directors.size(); i++) {
+                params[i] = filmId;
+                params[i + 1] = directors.get(i).getId();
+            }
+            jdbcTemplate.update(sqlInsert, params);
         }
     }
 
@@ -91,7 +115,7 @@ public class DaoDirectorsImpl implements DaoDirectors {
 
     @Override
     public void deleteDirector(Integer id) {
-        String sql ="DELETE FROM directors WHERE director_id = ?";
+        String sql = "DELETE FROM directors WHERE director_id = ?";
         jdbcTemplate.update(sql, id);
     }
 }
