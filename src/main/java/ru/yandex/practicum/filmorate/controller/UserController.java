@@ -119,7 +119,7 @@ public class UserController {
             return userService.getRecommendations(id);
         } catch (IncorrectIdException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "Ошибка возвращения списка общих друзей! " + e.getMessage());
+                    "Ошибка возвращения списка рекомендаций! " + e.getMessage());
         }
     }
 }
