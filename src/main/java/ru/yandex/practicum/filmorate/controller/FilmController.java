@@ -5,9 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
 import org.springframework.web.server.ResponseStatusException;
 import ru.yandex.practicum.filmorate.controller.service.FilmService;
 import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
+import ru.yandex.practicum.filmorate.exceptions.IncorrectYearException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import javax.validation.Valid;
@@ -39,8 +41,7 @@ public class FilmController {
         try {
             return filmService.update(film);
         } catch (IncorrectIdException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "Ошибка Обновления фильма! " + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Ошибка Обновления фильма! " + e.getMessage());
         }
     }
 
@@ -49,8 +50,7 @@ public class FilmController {
         try {
             return filmService.search(id);
         } catch (IncorrectIdException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "Ошибка поиска фильма! " + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Ошибка поиска фильма! " + e.getMessage());
         }
     }
 
@@ -59,8 +59,7 @@ public class FilmController {
         try {
             return filmService.delete(id);
         } catch (IncorrectIdException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "Ошибка удаления фильма! " + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Ошибка удаления фильма! " + e.getMessage());
         }
     }
 
@@ -74,8 +73,7 @@ public class FilmController {
         try {
             return filmService.addLike(id, userId);
         } catch (IncorrectIdException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "Ошибка добавления лайка! " + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Ошибка добавления лайка! " + e.getMessage());
         }
     }
 
@@ -83,17 +81,21 @@ public class FilmController {
     public Film delLike(@PathVariable int id, @PathVariable int userId) {
         Film film;
         try {
-            film = filmService.delLike(id, userId);
+            return filmService.delLike(id, userId);
         } catch (IncorrectIdException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "Ошибка добавления лайка! " + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Ошибка добавления лайка! " + e.getMessage());
         }
-        return film;
     }
 
     @GetMapping("/popular")
-    public List<Film> popFilms(@RequestParam(defaultValue = "10") int count) {
-        return filmService.getNPopularFilms(count);
+    public List<Film> popFilms(@RequestParam(defaultValue = "10") int count,
+                               @RequestParam(required = false) Integer genreId,
+                               @RequestParam(required = false) Integer year) {
+        try {
+            return filmService.getNPopularFilms(count, genreId, year);
+        } catch (IncorrectIdException | IncorrectYearException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Ошибка вывода популярных фильмов! " + e.getMessage());
+        }
     }
 
     @GetMapping("/director/{directorId}")

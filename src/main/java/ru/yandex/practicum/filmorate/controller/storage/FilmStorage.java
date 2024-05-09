@@ -23,14 +23,14 @@ public interface FilmStorage {
      * @return обновленный фильм
      */
     Film deleteLike(int idFilm, int idUser);
-
+/*
     /**
      * Список N самых популярных фильмов
      *
      * @param n количество фильмов
      * @return список фильмов
      */
-    List<Film> getNPopularFilms(int n);
+    //List<Film> getNPopularFilms(int n);
 
     /**
      * Добавить фильм
@@ -77,4 +77,14 @@ public interface FilmStorage {
      * @return список фильмов режиссера, отсортированных по количеству лайков или году выпуска
      */
     List<Film> getFilmsByDirector(Integer directorId, String sortBy) throws IncorrectIdException;
+
+    /**
+     * Вернуть список самых популярных фильмов одного жанра за один год
+     *
+     * @param n       количество фильмов
+     * @param genreId идентификатор жанра
+     * @param year    год
+     * @return список фильмов
+     */
+    List<Film> getNPopularFilms(Integer n, Integer genreId, Integer year);
 }

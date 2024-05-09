@@ -31,19 +31,20 @@ public interface DaoLikes {
      */
     List<Integer> findAllIdUsersLikesFilm(int idFilm);
 
-
-    /**
-     * Вернуть список из n самых популярных фильмов
-     *
-     * @param n количество фильмов в списке
-     * @return список популярных фильмов
-     */
-    List<Film> getPop(int n);
-
     /**
      * Вернуть список идентификаторов пользователей с их лайками
      *
      * @return список лайков
      */
     Map<Integer, Set<Integer>> getAllUserIdWithLikes();
+
+    /**
+     * Вернуть список самых популярных фильмов одного жанра за один год
+     *
+     * @param n       количество фильмов
+     * @param genreId идентификатор жанра
+     * @param year    год
+     * @return список фильмов
+     */
+    List<Film> getNPopularFilms(Integer n, Integer genreId, Integer year);
 }

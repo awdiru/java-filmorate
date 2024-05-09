@@ -48,11 +48,12 @@ public class FilmStorageDao implements FilmStorage {
         return search(idFilm);
     }
 
-    @Override
-    public List<Film> getNPopularFilms(int n) {
-        return daoLikes.getPop(n);
-    }
-
+    /*
+        @Override
+        public List<Film> getNPopularFilms(int n) {
+            return daoLikes.getPop(n);
+        }
+    */
     @Override
     public Film add(Film film) {
         if (film == null) return null;
@@ -100,6 +101,11 @@ public class FilmStorageDao implements FilmStorage {
     @Override
     public List<Film> findAll() {
         return daoFilms.findAll();
+    }
+
+    @Override
+    public List<Film> getNPopularFilms(Integer n, Integer genreId, Integer year) {
+        return daoLikes.getNPopularFilms(n, genreId, year);
     }
 
     @Override

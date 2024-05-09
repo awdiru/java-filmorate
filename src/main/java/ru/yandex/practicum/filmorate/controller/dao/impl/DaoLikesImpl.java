@@ -46,24 +46,6 @@ public class DaoLikesImpl implements DaoLikes {
     }
 
     @Override
-    public List<Film> getPop(int n) {
-
-        try {
-            String sql = "SELECT * FROM films WHERE film_id IN ( " +
-                    "SELECT film_id FROM likes GROUP BY film_id ORDER BY count(user_id) LIMIT ?)";
-            List<Film> films = jdbcTemplate.query(sql, (rs, rowNum) -> DaoFactoryModel.makeFilm(rs, jdbcTemplate), n);
-
-            if (films.isEmpty()) {
-                String sqlAll = "SELECT * FROM films ORDER BY name LIMIT ?";
-                films = jdbcTemplate.query(sqlAll, (rs, rowNum) -> DaoFactoryModel.makeFilm(rs, jdbcTemplate), n);
-            }
-            return films;
-        } catch (EmptyResultDataAccessException e) {
-            return new ArrayList<>();
-        }
-    }
-
-    @Override
     public Map<Integer, Set<Integer>> getAllUserIdWithLikes() {
         String sql = "SELECT * FROM likes";
         List<Like> likes;
@@ -80,6 +62,78 @@ public class DaoLikesImpl implements DaoLikes {
             userIdWithLikes.get(like.idUser).add(like.idFilm);
         }
         return userIdWithLikes;
+    }
+
+    @Override
+    public List<Film> getNPopularFilms(Integer n, Integer genreId, Integer year) {
+        try {
+            String sql;
+            List<Film> films;
+            if (genreId != null && year != null) {
+                sql = "SELECT * FROM films WHERE " +
+                        "EXTRACT(YEAR FROM release_date) = ? " +
+                        "AND film_id IN (" +
+                        "SELECT film_id FROM film_genre WHERE genre_id = ?) " +
+                        "AND film_id IN (" +
+                        "SELECT film_id FROM likes GROUP BY film_id ORDER BY user_id) " +
+                        "LIMIT ?";
+                films = jdbcTemplate.query(sql, (rs, rowNum) -> DaoFactoryModel.makeFilm(rs, jdbcTemplate), year, genreId, n);
+
+                if (films.isEmpty()) {
+                    sql = "SELECT * FROM films WHERE " +
+                            "EXTRACT(YEAR FROM release_date) = ? " +
+                            "AND film_id IN (" +
+                            "SELECT film_id FROM film_genre WHERE genre_id = ?) " +
+                            "ORDER BY film_id " +
+                            "LIMIT ?";
+                    films = jdbcTemplate.query(sql, (rs, rowNum) -> DaoFactoryModel.makeFilm(rs, jdbcTemplate), year, genreId, n);
+                }
+            } else if (genreId == null && year != null) {
+                sql = "SELECT * FROM films WHERE " +
+                        "EXTRACT(YEAR FROM release_date) = ? " +
+                        "AND film_id IN (" +
+                        "SELECT film_id FROM likes GROUP BY film_id ORDER BY user_id)" +
+                        "LIMIT ?";
+                films = jdbcTemplate.query(sql, (rs, rowNum) -> DaoFactoryModel.makeFilm(rs, jdbcTemplate), year, n);
+
+                if (films.isEmpty()) {
+                    sql = "SELECT * FROM films WHERE " +
+                            "EXTRACT(YEAR FROM release_date) = ? " +
+                            "ORDER BY film_id " +
+                            "LIMIT ?";
+                    films = jdbcTemplate.query(sql, (rs, rowNum) -> DaoFactoryModel.makeFilm(rs, jdbcTemplate), year, n);
+                }
+            } else if (genreId != null) {
+                sql = "SELECT * FROM films WHERE " +
+                        "film_id IN (" +
+                        "SELECT film_id FROM film_genre WHERE genre_id = ?)" +
+                        "AND film_id IN (" +
+                        "SELECT film_id FROM likes GROUP BY film_id ORDER BY user_id)" +
+                        "LIMIT ?";
+                films = jdbcTemplate.query(sql, (rs, rowNum) -> DaoFactoryModel.makeFilm(rs, jdbcTemplate), genreId, n);
+
+                if (films.isEmpty()) {
+                    sql = "SELECT * FROM films WHERE film_id IN (" +
+                            "SELECT film_id FROM film_genre WHERE genre_id = ?) " +
+                            "ORDER BY film_id " +
+                            "LIMIT ?";
+                    films = jdbcTemplate.query(sql, (rs, rowNum) -> DaoFactoryModel.makeFilm(rs, jdbcTemplate), genreId, n);
+                }
+            } else {
+                sql = "SELECT * FROM films WHERE film_id IN ( " +
+                        "SELECT film_id FROM likes GROUP BY film_id ORDER BY count(user_id) LIMIT ?)";
+                films = jdbcTemplate.query(sql, (rs, rowNum) -> DaoFactoryModel.makeFilm(rs, jdbcTemplate), n);
+
+                if (films.isEmpty()) {
+                    String sqlAll = "SELECT * FROM films ORDER BY film_id LIMIT ?";
+                    films = jdbcTemplate.query(sqlAll, (rs, rowNum) -> DaoFactoryModel.makeFilm(rs, jdbcTemplate), n);
+                }
+            }
+            return films;
+        } catch (
+                EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
     }
 
     private Like makeLike(ResultSet rs) throws SQLException {

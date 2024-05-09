@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.controller.storage.FilmStorage;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -35,17 +36,51 @@ public class FilmStorageInMemory implements FilmStorage {
         return film;
     }
 
+
     @Override
-    public List<Film> getNPopularFilms(int n) {
-        return films.values().stream()
-                .filter(film -> !film.getLikes().isEmpty())
-                .sorted((Film film1,Film film2) -> {
-                    if (film1.getLikes().size() >= film1.getLikes().size())
-                        return -1;
-                    return 1;
-                })
-                .limit(n)
-                .collect(Collectors.toList());
+    public List<Film> getNPopularFilms(Integer n, Integer genreId, Integer year) {
+        if (genreId == null && year == null) {
+            return films.values().stream()
+                    .filter(film -> !film.getLikes().isEmpty())
+                    .sorted((Film film1, Film film2) -> {
+                        if (film1.getLikes().size() >= film1.getLikes().size())
+                            return -1;
+                        return 1;
+                    })
+                    .limit(n)
+                    .collect(Collectors.toList());
+        } else if (genreId != null && year == null) {
+            return films.values().stream()
+                    .filter(film -> film.getGenres().contains(new Genre(genreId, null)))
+                    .sorted((Film film1, Film film2) -> {
+                        if (film1.getLikes().size() >= film1.getLikes().size())
+                            return -1;
+                        return 1;
+                    })
+                    .limit(n)
+                    .collect(Collectors.toList());
+        } else if (genreId == null) {
+            return films.values().stream()
+                    .filter(film -> film.getReleaseDate().getYear() == year)
+                    .sorted((Film film1, Film film2) -> {
+                        if (film1.getLikes().size() >= film1.getLikes().size())
+                            return -1;
+                        return 1;
+                    })
+                    .limit(n)
+                    .collect(Collectors.toList());
+        } else {
+            return films.values().stream()
+                    .filter(film -> film.getGenres().contains(new Genre(genreId, null)))
+                    .filter(film -> film.getReleaseDate().getYear() == year)
+                    .sorted((Film film1, Film film2) -> {
+                        if (film1.getLikes().size() >= film1.getLikes().size())
+                            return -1;
+                        return 1;
+                    })
+                    .limit(n)
+                    .collect(Collectors.toList());
+        }
     }
 
     @Override

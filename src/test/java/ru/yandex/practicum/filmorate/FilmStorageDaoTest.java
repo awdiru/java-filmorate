@@ -175,7 +175,7 @@ public class FilmStorageDaoTest {
         film.getLikes().add(1);
         popFilms.add(film);
 
-        List<Film> searchPopFilm = filmStorage.getNPopularFilms(5);
+        List<Film> searchPopFilm = filmStorage.getNPopularFilms(5, null, null);
         assertThat(searchPopFilm)
                 .isNotNull()
                 .usingRecursiveComparison()
