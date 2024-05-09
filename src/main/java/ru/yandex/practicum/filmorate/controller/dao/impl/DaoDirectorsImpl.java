@@ -75,8 +75,8 @@ public class DaoDirectorsImpl implements DaoDirectors {
 
             Integer[] params = new Integer[directors.size() * 2];
             for (int i = 0; i < directors.size(); i++) {
-                params[i] = filmId;
-                params[i + 1] = directors.get(i).getId();
+                params[i * 2] = filmId;
+                params[i * 2 + 1] = directors.get(i).getId();
             }
             jdbcTemplate.update(sqlInsert, params);
         }
@@ -97,17 +97,6 @@ public class DaoDirectorsImpl implements DaoDirectors {
         String sql = "SELECT * FROM directors";
         try {
             return jdbcTemplate.query(sql, (rs, num) -> DaoFactoryModel.makeDirector(rs));
-        } catch (EmptyResultDataAccessException e) {
-            return new ArrayList<>();
-        }
-    }
-
-    @Override
-    public List<Director> getDirectorsFilm(Integer idFilm) {
-        String sql = "SELECT * FROM directors WHERE director_id IN " +
-                "(SELECT director_id FROM film_director WHERE film_id = ?)";
-        try {
-            return jdbcTemplate.query(sql, (rs, num) -> DaoFactoryModel.makeDirector(rs), idFilm);
         } catch (EmptyResultDataAccessException e) {
             return new ArrayList<>();
         }

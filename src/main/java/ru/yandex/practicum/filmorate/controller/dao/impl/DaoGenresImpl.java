@@ -73,7 +73,7 @@ public class DaoGenresImpl implements DaoGenres {
             List<Genre> genres = jdbcTemplate.query(sql, ((rs, rowNum) -> DaoFactoryModel.makeGenre(rs)), film.getId());
             film.setGenres(genres);
         } else {
-            film.setGenres(new ArrayList<>()); // TODO добавлено, иначе не проходил мой тест
+            film.setGenres(new ArrayList<>());
         }
         return film;
     }

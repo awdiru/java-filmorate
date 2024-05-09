@@ -60,8 +60,13 @@ public class DirectorController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteDirector(@PathVariable Integer id) throws IncorrectIdException {
+    public void deleteDirector(@PathVariable Integer id) {
         log.info("Удаление режиссера по id: {}", id);
-        directorService.deleteDirector(id);
+        try {
+            directorService.deleteDirector(id);
+        } catch (IncorrectIdException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Попытка удаления несуществующего режиссера! " + e.getMessage());
+        }
     }
 }

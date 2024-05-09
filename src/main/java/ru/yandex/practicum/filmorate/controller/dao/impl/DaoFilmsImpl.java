@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.controller.dao.DaoDirectors;
 import ru.yandex.practicum.filmorate.controller.dao.DaoFilms;
 import ru.yandex.practicum.filmorate.controller.dao.DaoGenres;
-import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.ArrayList;
@@ -96,7 +95,7 @@ public class DaoFilmsImpl implements DaoFilms {
     }
 
     @Override
-    public List<Film> getFilmsByDirector(Integer directorId, String sortBy) throws IncorrectIdException {
+    public List<Film> getFilmsByDirector(Integer directorId, String sortBy) {
         try {
             daoDirectors.getById(directorId);
             String sql;
@@ -123,7 +122,7 @@ public class DaoFilmsImpl implements DaoFilms {
             }
             return new ArrayList<>();
         } catch (EmptyResultDataAccessException e) {
-            throw new IncorrectIdException("Режиссер не найден");
+            return new ArrayList<>();
         }
     }
 }

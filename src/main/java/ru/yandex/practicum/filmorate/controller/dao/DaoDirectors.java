@@ -51,14 +51,6 @@ public interface DaoDirectors {
     List<Director> findAllDirectors();
 
     /**
-     * Получить список режиссеров фильма
-     *
-     * @param idFilm идентификатор фильма
-     * @return список всех режиссеров фильма
-     */
-    List<Director> getDirectorsFilm(Integer idFilm);
-
-    /**
      * Удаление режиссера
      *
      * @param id идентификатор режиссера

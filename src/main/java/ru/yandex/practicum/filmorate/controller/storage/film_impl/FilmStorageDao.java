@@ -13,7 +13,6 @@ import ru.yandex.practicum.filmorate.controller.dao.impl.DaoFilmsImpl;
 import ru.yandex.practicum.filmorate.controller.dao.impl.DaoGenresImpl;
 import ru.yandex.practicum.filmorate.controller.dao.impl.DaoLikesImpl;
 import ru.yandex.practicum.filmorate.controller.storage.FilmStorage;
-import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 
@@ -104,7 +103,7 @@ public class FilmStorageDao implements FilmStorage {
     }
 
     @Override
-    public List<Film> getFilmsByDirector(Integer directorId, String sortBy) throws IncorrectIdException {
+    public List<Film> getFilmsByDirector(Integer directorId, String sortBy) {
         return daoFilms.getFilmsByDirector(directorId, sortBy);
     }
 }

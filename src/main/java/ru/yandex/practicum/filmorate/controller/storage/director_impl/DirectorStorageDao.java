@@ -22,6 +22,16 @@ public class DirectorStorageDao implements DirectorStorage {
     }
 
     @Override
+    public Director createDirector(Director director) {
+       return daoDirectors.createDirector(director);
+    }
+
+    @Override
+    public Director updateDirector(Director director) {
+        return daoDirectors.updateDirector(director);
+    }
+
+    @Override
     public Director getById(Integer id) {
         return daoDirectors.getById(id);
     }
@@ -29,5 +39,10 @@ public class DirectorStorageDao implements DirectorStorage {
     @Override
     public List<Director> findAllDirectors() {
         return daoDirectors.findAllDirectors();
+    }
+
+    @Override
+    public void deleteDirector(Integer id) {
+        daoDirectors.deleteDirector(id);
     }
 }

@@ -37,8 +37,7 @@ public class FilmController {
     @PutMapping
     public Film update(@RequestBody @Valid Film film) {
         try {
-            Film result = filmService.update(film);
-            return result;
+            return filmService.update(film);
         } catch (IncorrectIdException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
                     "Ошибка Обновления фильма! " + e.getMessage());
@@ -99,7 +98,7 @@ public class FilmController {
 
     @GetMapping("/director/{directorId}")
     public List<Film> getFilmsByDirector(@PathVariable("directorId") Integer directorId,
-                                         @RequestParam String sortBy) throws IncorrectIdException {
+                                         @RequestParam String sortBy) {
         try {
             return filmService.getFilmsByDirector(directorId, sortBy);
         } catch (IncorrectIdException e) {

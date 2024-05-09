@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.controller.dao;
 
-import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.List;
@@ -50,5 +49,5 @@ public interface DaoFilms {
      *
      * @return список фильмов режиссера, отсортированных по количеству лайков или году выпуска
      */
-    List<Film> getFilmsByDirector(Integer directorId, String sortBy) throws IncorrectIdException;
+    List<Film> getFilmsByDirector(Integer directorId, String sortBy);
 }

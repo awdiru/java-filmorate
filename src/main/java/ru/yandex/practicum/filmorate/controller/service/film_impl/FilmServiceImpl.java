@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.controller.service.film_impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.controller.service.DirectorService;
 import ru.yandex.practicum.filmorate.controller.service.FilmService;
 import ru.yandex.practicum.filmorate.controller.service.UserService;
 import ru.yandex.practicum.filmorate.controller.storage.FilmStorage;
@@ -16,12 +17,15 @@ import java.util.*;
 public class FilmServiceImpl implements FilmService {
     private final FilmStorage filmStorage;
     private final UserService userService;
+    private final DirectorService directorService;
 
     @Autowired
     public FilmServiceImpl(@Qualifier("FilmStorageDao") FilmStorage filmStorage,
-                           @Qualifier("UserServiceImpl") UserService userService) {
+                           @Qualifier("UserServiceImpl") UserService userService,
+                           @Qualifier("DirectorServiceImpl") DirectorService directorService) {
         this.filmStorage = filmStorage;
         this.userService = userService;
+        this.directorService = directorService;
     }
 
     @Override
@@ -75,10 +79,7 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     public List<Film> getFilmsByDirector(Integer directorId, String sortBy) throws IncorrectIdException {
-        List<Film> films = filmStorage.getFilmsByDirector(directorId, sortBy);
-        if (films.isEmpty()) {
-            throw new IncorrectIdException("У режиссера с ID " + directorId + " фильмы не найдены.");
-        }
-        return films;
+        directorService.getById(directorId);
+        return filmStorage.getFilmsByDirector(directorId, sortBy);
     }
 }
