@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.controller.service;
 
 import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
+import ru.yandex.practicum.filmorate.exceptions.IncorrectYearException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.List;
@@ -25,14 +26,6 @@ public interface FilmService {
      * @throws IncorrectIdException некорректный идентификатор
      */
     Film delLike(int idFilm, int idUser) throws IncorrectIdException;
-
-    /**
-     * Список N самых популярных фильмов
-     *
-     * @param n количество фильмов
-     * @return список фильмов
-     */
-    List<Film> getNPopularFilms(int n);
 
     /**
      * Добавить фильм
@@ -72,4 +65,14 @@ public interface FilmService {
      * @return список всех фильмов
      */
     List<Film> findAll();
+
+    /**
+     * Вернуть список самых популярных фильмов одного жанра за один год
+     *
+     * @param n       количество фильмов
+     * @param genreId идентификатор жанра
+     * @param year    год
+     * @return список фильмов
+     */
+    List<Film> getNPopularFilms(Integer n, Integer genreId, Integer year) throws IncorrectIdException, IncorrectYearException;
 }
