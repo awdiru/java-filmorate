@@ -67,10 +67,10 @@ public class DaoDirectorsImpl implements DaoDirectors {
     @Override
     public void addFilmDirectors(Integer filmId, List<Director> directors) {
         if (directors != null && !directors.isEmpty()) {
-            String sqlInsert = "INSERT INTO film_director (film_id, director_id) VALUES (?, ?)";
+            StringBuilder sqlInsert = new StringBuilder("INSERT INTO film_director (film_id, director_id) VALUES (?, ?)");
 
             for (int i = 1; i < directors.size(); i++) {
-                sqlInsert = sqlInsert + ", (?, ?)";
+                sqlInsert.append(", (?, ?)");
             }
 
             Integer[] params = new Integer[directors.size() * 2];
@@ -78,7 +78,7 @@ public class DaoDirectorsImpl implements DaoDirectors {
                 params[i * 2] = filmId;
                 params[i * 2 + 1] = directors.get(i).getId();
             }
-            jdbcTemplate.update(sqlInsert, params);
+            jdbcTemplate.update(sqlInsert.toString(), params);
         }
     }
 

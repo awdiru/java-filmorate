@@ -97,7 +97,6 @@ public class DaoFilmsImpl implements DaoFilms {
     @Override
     public List<Film> getFilmsByDirector(Integer directorId, String sortBy) {
         try {
-            daoDirectors.getById(directorId);
             String sql;
             if (sortBy.equals("year")) {
                 sql = "SELECT f.film_id, f.name, f.description, f.release_date, f.duration, f.rating_id, r.name " +
