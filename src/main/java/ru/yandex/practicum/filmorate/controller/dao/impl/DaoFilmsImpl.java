@@ -86,7 +86,7 @@ public class DaoFilmsImpl implements DaoFilms {
 
     @Override
     public List<Film> findAll() {
-        String sql = "SELECT * FROM films";
+        String sql = "SELECT * FROM films order by film_id asc";
         try {
             return jdbcTemplate.query(sql, (rs, num) -> DaoFactoryModel.makeFilm(rs, jdbcTemplate));
         } catch (EmptyResultDataAccessException e) {
