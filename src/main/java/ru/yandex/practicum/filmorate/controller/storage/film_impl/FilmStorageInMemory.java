@@ -29,6 +29,11 @@ public class FilmStorageInMemory implements FilmStorage {
     }
 
     @Override
+    public List<Film> commonFilmsWithFriend(Integer userId, Integer friendId) {
+        return List.of();
+    }
+
+    @Override
     public Film deleteLike(int idFilm, int idUser) {
         Film film = films.get(idFilm);
         if (film == null) return null;

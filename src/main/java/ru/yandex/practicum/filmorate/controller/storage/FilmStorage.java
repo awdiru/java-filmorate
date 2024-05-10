@@ -16,6 +16,15 @@ public interface FilmStorage {
     Film addLike(int idFilm, int idUser);
 
     /**
+     * Получить общие с другом фильмы.
+     *
+     * @param userId   идентификатор пользователя
+     * @param friendId идентификатор друга
+     * @return список фильмов
+     */
+    List<Film> commonFilmsWithFriend(Integer userId, Integer friendId);
+
+    /**
      * Удалить лайк у фильма
      *
      * @param idFilm идентификатор фильма

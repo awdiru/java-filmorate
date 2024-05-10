@@ -36,6 +36,12 @@ public class FilmController {
         }
     }
 
+    @GetMapping("/common")
+    public List<Film> commonFilmsWithFriend(@RequestParam Integer userId,
+                                            @RequestParam Integer friendId) {
+        return filmService.commonFilmsWithFriend(userId, friendId);
+    }
+
     @PutMapping
     public Film update(@RequestBody @Valid Film film) {
         try {
