@@ -53,26 +53,20 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public Review updateReview(Review review) throws IncorrectIdException {
-        if (reviewStorage.getReview(review.getReviewId()) == null) {
-            throw new IncorrectIdException(String.format("Отзыва с id = {} не существует", review.getReviewId()));
-        }
+        getReview(review.getReviewId());
         return reviewStorage.updateReview(review);
     }
 
     @Override
     public void deleteReview(int id) throws IncorrectIdException {
-        if (reviewStorage.getReview(id) == null) {
-            throw new IncorrectIdException(String.format("Отзыва с id = {} не существует", id));
-        }
+        getReview(id);
         reviewStorage.deleteReview(id);
     }
 
     @Override
     public void addLike(int reviewId, int userId) throws IncorrectIdException {
         userService.search(userId);
-        if (reviewStorage.getReview(reviewId) == null) {
-            throw new IncorrectIdException(String.format("Отзыва с id = {} не существует", reviewId));
-        }
+        getReview(reviewId);
         reviewStorage.addLike(reviewId, userId);
         reviewStorage.deleteDislike(reviewId, userId);
     }
@@ -80,18 +74,14 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public void deleteLike(int reviewId, int userId) throws IncorrectIdException {
         userService.search(userId);
-        if (reviewStorage.getReview(reviewId) == null) {
-            throw new IncorrectIdException(String.format("Отзыва с id = {} не существует", reviewId));
-        }
+        getReview(reviewId);
         reviewStorage.deleteLike(reviewId, userId);
     }
 
     @Override
     public void addDislike(int reviewId, int userId) throws IncorrectIdException {
         userService.search(userId);
-        if (reviewStorage.getReview(reviewId) == null) {
-            throw new IncorrectIdException(String.format("Отзыва с id = {} не существует", reviewId));
-        }
+        getReview(reviewId);
         reviewStorage.addDislike(reviewId, userId);
         reviewStorage.deleteLike(reviewId, userId);
     }
@@ -99,9 +89,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public void deleteDislike(int reviewId, int userId) throws IncorrectIdException {
         userService.search(userId);
-        if (reviewStorage.getReview(reviewId) == null) {
-            throw new IncorrectIdException(String.format("Отзыва с id = {} не существует", reviewId));
-        }
+        getReview(reviewId);
         reviewStorage.deleteDislike(reviewId, userId);
     }
 
