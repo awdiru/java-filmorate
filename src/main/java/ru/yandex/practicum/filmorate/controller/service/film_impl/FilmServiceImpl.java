@@ -73,6 +73,32 @@ public class FilmServiceImpl implements FilmService {
     }
 
     @Override
+    public List<Film> searchByParam(String query, String by) {
+        query = protectedInjection(query);
+        boolean director = false;
+        boolean title = false;
+        if (by == null) {
+            by = "";
+        }
+        String[] splitBy = by.split(",");
+        for (int i = 0; i < splitBy.length; i++) {
+            if (splitBy[i].trim().equalsIgnoreCase("director")) {
+                director = true;
+            }
+            if (splitBy[i].trim().equalsIgnoreCase("title")) {
+                title = true;
+            }
+        }
+        return filmStorage.searchByParam(query, director, title);
+    }
+
+    private String protectedInjection(String str) {
+        str = str.replace(";", "");
+        str = str.replace("\"", "\\\"");
+        return str;
+    }
+
+    @Override
     public List<Film> findAll() {
         return filmStorage.findAll();
     }

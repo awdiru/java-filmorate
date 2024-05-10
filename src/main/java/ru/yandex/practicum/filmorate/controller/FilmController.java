@@ -69,6 +69,12 @@ public class FilmController {
         return filmService.findAll();
     }
 
+    @GetMapping("/search")
+    public List<Film> searchByParam(@RequestParam String query,
+                                    @RequestParam String by) {
+        return filmService.searchByParam(query, by);
+    }
+
     @PutMapping("/{id}/like/{userId}")
     public Film addLike(@PathVariable int id, @PathVariable int userId) {
         try {
