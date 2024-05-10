@@ -13,14 +13,14 @@ import java.util.List;
 @Qualifier("DaoReviewLikesImpl")
 public class DaoReviewLikesImpl implements DaoReviewLikes {
 
-    JdbcTemplate jdbcTemplate;
+    private JdbcTemplate jdbcTemplate;
 
     @Override
     public List<Integer> getLikes(int reviewId) {
         String sql = "select user_id " +
                 "from review_likes " +
                 "where review_id = ?";
-        List<Integer> reviewLikes = jdbcTemplate.query(sql, (rs, rowNum) -> rs.getInt("user_id"));
+        List<Integer> reviewLikes = jdbcTemplate.query(sql, (rs, rowNum) -> rs.getInt("user_id"), reviewId);
         return reviewLikes;
     }
 

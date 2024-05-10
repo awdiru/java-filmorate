@@ -19,7 +19,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class DaoReviewsImpl implements DaoReviews {
 
-    JdbcTemplate jdbcTemplate;
+    private JdbcTemplate jdbcTemplate;
 
     @Override
     public Review addReview(Review review) {

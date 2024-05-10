@@ -21,7 +21,7 @@ import java.util.Optional;
 public class ReviewController {
 
     @Qualifier("ReviewServiceImpl")
-    ReviewService reviewService;
+    private ReviewService reviewService;
 
     @GetMapping("/{id}")
     public Review getReview(@PathVariable int id) {

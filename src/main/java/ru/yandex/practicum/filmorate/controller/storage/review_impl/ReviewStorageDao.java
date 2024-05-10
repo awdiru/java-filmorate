@@ -17,11 +17,11 @@ import java.util.List;
 public class ReviewStorageDao implements ReviewStorage {
 
     @Qualifier("DaoReviewsImpl")
-    DaoReviews daoReviews;
+    private DaoReviews daoReviews;
     @Qualifier("DaoReviewLikesImpl")
-    DaoReviewLikes daoReviewLikes;
+    private DaoReviewLikes daoReviewLikes;
     @Qualifier("DaoReviewDislikesImpl")
-    DaoReviewDislikes daoReviewDislikes;
+    private DaoReviewDislikes daoReviewDislikes;
 
     @Override
     public Review addReview(Review review) {

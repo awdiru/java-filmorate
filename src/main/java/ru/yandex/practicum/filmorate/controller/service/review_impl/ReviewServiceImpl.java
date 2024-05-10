@@ -18,11 +18,11 @@ import java.util.List;
 public class ReviewServiceImpl implements ReviewService {
 
     @Qualifier("ReviewStorageDao")
-    ReviewStorage reviewStorage;
+    private ReviewStorage reviewStorage;
     @Qualifier("FilmServiceImpl")
-    FilmService filmService;
+    private FilmService filmService;
     @Qualifier("UserServiceImpl")
-    UserService userService;
+    private UserService userService;
 
     @Override
     public Review addReview(Review review) throws IncorrectIdException {

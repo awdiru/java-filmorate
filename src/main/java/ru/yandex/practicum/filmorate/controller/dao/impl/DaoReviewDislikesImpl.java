@@ -9,18 +9,18 @@ import ru.yandex.practicum.filmorate.controller.dao.DaoReviewDislikes;
 import java.util.List;
 
 @Component
-@AllArgsConstructor
+@AllArgsConstructor()
 @Qualifier("DaoReviewDislikesImpl")
 public class DaoReviewDislikesImpl implements DaoReviewDislikes {
 
-    JdbcTemplate jdbcTemplate;
+    private JdbcTemplate jdbcTemplate;
 
     @Override
     public List<Integer> getDislikes(int reviewId) {
         String sql = "select user_id " +
                 "from review_dislikes " +
                 "where review_id = ?";
-        List<Integer> reviewLikes = jdbcTemplate.query(sql, (rs, rowNum) -> rs.getInt("user_id"));
+        List<Integer> reviewLikes = jdbcTemplate.query(sql, (rs, rowNum) -> rs.getInt("user_id"), reviewId);
         return reviewLikes;
     }
 
