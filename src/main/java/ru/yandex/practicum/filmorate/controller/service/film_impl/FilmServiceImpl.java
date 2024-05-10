@@ -92,12 +92,6 @@ public class FilmServiceImpl implements FilmService {
         return filmStorage.searchByParam(query, director, title);
     }
 
-    private String protectedInjection(String str) {
-        str = str.replace(";", "");
-        str = str.replace("\"", "\\\"");
-        return str;
-    }
-
     @Override
     public List<Film> findAll() {
         return filmStorage.findAll();
@@ -107,5 +101,11 @@ public class FilmServiceImpl implements FilmService {
     public List<Film> getFilmsByDirector(Integer directorId, String sortBy) throws IncorrectIdException {
         directorService.getById(directorId);
         return filmStorage.getFilmsByDirector(directorId, sortBy);
+    }
+
+    private String protectedInjection(String str) {
+        str = str.replace(";", "");
+        str = str.replace("\"", "\\\"");
+        return str;
     }
 }
