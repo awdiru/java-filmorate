@@ -23,14 +23,6 @@ public interface FilmStorage {
      * @return обновленный фильм
      */
     Film deleteLike(int idFilm, int idUser);
-/*
-    /**
-     * Список N самых популярных фильмов
-     *
-     * @param n количество фильмов
-     * @return список фильмов
-     */
-    //List<Film> getNPopularFilms(int n);
 
     /**
      * Добавить фильм

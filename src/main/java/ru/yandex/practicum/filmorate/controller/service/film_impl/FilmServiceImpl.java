@@ -25,8 +25,9 @@ public class FilmServiceImpl implements FilmService {
     @Autowired
     public FilmServiceImpl(@Qualifier("FilmStorageDao") FilmStorage filmStorage,
                            @Qualifier("UserServiceImpl") UserService userService,
-                           @Qualifier("GenreStorageDao") GenreStorage genreStorage) {
+                           @Qualifier("GenreStorageDao") GenreStorage genreStorage,
                            @Qualifier("DirectorServiceImpl") DirectorService directorService) {
+
         this.filmStorage = filmStorage;
         this.userService = userService;
         this.genreStorage = genreStorage;
@@ -47,12 +48,6 @@ public class FilmServiceImpl implements FilmService {
         return filmStorage.deleteLike(idFilm, idUser);
     }
 
-    /*
-        @Override
-        public List<Film> getNPopularFilms(int n) {
-            return filmStorage.getNPopularFilms(n);
-        }
-    */
     @Override
     public Film add(Film film) {
         return filmStorage.add(film);
@@ -84,7 +79,8 @@ public class FilmServiceImpl implements FilmService {
     }
 
     @Override
-    public List<Film> getNPopularFilms(Integer n, Integer genreId, Integer year) throws IncorrectIdException, IncorrectYearException {
+    public List<Film> getNPopularFilms(Integer n, Integer genreId, Integer year) throws
+            IncorrectIdException, IncorrectYearException {
         if (genreId != null && genreStorage.getById(genreId) == null)
             throw new IncorrectIdException("Жанр с id " + genreId + " не найден.");
         if (year != null && year < 1895)
