@@ -4,9 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.controller.dao.DaoDirectors;
 import ru.yandex.practicum.filmorate.controller.dao.DaoFilms;
 import ru.yandex.practicum.filmorate.controller.dao.DaoGenres;
 import ru.yandex.practicum.filmorate.controller.dao.DaoLikes;
+import ru.yandex.practicum.filmorate.controller.dao.impl.DaoDirectorsImpl;
 import ru.yandex.practicum.filmorate.controller.dao.impl.DaoFilmsImpl;
 import ru.yandex.practicum.filmorate.controller.dao.impl.DaoGenresImpl;
 import ru.yandex.practicum.filmorate.controller.dao.impl.DaoLikesImpl;
@@ -24,12 +26,14 @@ public class FilmStorageDao implements FilmStorage {
     private final DaoLikes daoLikes;
 
     private final DaoGenres daoGenres;
+    private final DaoDirectors daoDirectors;
 
     @Autowired
     public FilmStorageDao(JdbcTemplate jdbcTemplate) {
         this.daoFilms = new DaoFilmsImpl(jdbcTemplate);
         this.daoLikes = new DaoLikesImpl(jdbcTemplate);
         this.daoGenres = new DaoGenresImpl(jdbcTemplate);
+        this.daoDirectors = new DaoDirectorsImpl(jdbcTemplate);
     }
 
     @Override
@@ -57,6 +61,7 @@ public class FilmStorageDao implements FilmStorage {
 
         if (film.getLikes() == null) film.setLikes(new LinkedList<>());
         if (film.getGenres() == null) film.setGenres(new LinkedList<>());
+        if (film.getDirectors() == null) film.setDirectors(new LinkedList<>());
 
         if (!film.getLikes().isEmpty()) {
             for (Integer id : film.getLikes())
@@ -65,6 +70,9 @@ public class FilmStorageDao implements FilmStorage {
         if (!film.getGenres().isEmpty()) {
             for (Genre g : film.getGenres())
                 daoGenres.addGenreFilm(film.getId(), g.getId());
+        }
+        if (!film.getDirectors().isEmpty()) {
+            daoDirectors.addFilmDirectors(film.getId(), film.getDirectors());
         }
         return film;
     }
@@ -92,5 +100,10 @@ public class FilmStorageDao implements FilmStorage {
     @Override
     public List<Film> findAll() {
         return daoFilms.findAll();
+    }
+
+    @Override
+    public List<Film> getFilmsByDirector(Integer directorId, String sortBy) {
+        return daoFilms.getFilmsByDirector(directorId, sortBy);
     }
 }

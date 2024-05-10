@@ -186,7 +186,7 @@ public class FilmStorageDaoTest {
     private Film createFilm() {
         return new Film(1, "filmName", "filmDescription",
                 LocalDate.of(1990, 01, 01), 1000,
-                new Rating(1, "G"), new LinkedList<>(), new LinkedList<>());
+                new Rating(1, "G"), new LinkedList<>(), new LinkedList<>(), new LinkedList<>());
     }
 
     private User createUser() {

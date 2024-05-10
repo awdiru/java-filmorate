@@ -6,22 +6,28 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.controller.dao.DaoDirectors;
 import ru.yandex.practicum.filmorate.controller.dao.DaoFilms;
 import ru.yandex.practicum.filmorate.controller.dao.DaoGenres;
 import ru.yandex.practicum.filmorate.model.Film;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Component
 @Qualifier("DaoFilmsImpl")
 public class DaoFilmsImpl implements DaoFilms {
     private final JdbcTemplate jdbcTemplate;
     private final DaoGenres daoGenres;
+    private final DaoDirectors daoDirectors;
 
     @Autowired
     public DaoFilmsImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
         this.daoGenres = new DaoGenresImpl(jdbcTemplate);
+        this.daoDirectors = new DaoDirectorsImpl(jdbcTemplate);
     }
 
     @Override
@@ -56,6 +62,7 @@ public class DaoFilmsImpl implements DaoFilms {
                 film.getMpa().getId(),
                 film.getId());
 
+        daoDirectors.updateFilmDirectors(film.getId(), film.getDirectors());
         return daoGenres.updateGenresFilm(film);
     }
 
@@ -82,6 +89,37 @@ public class DaoFilmsImpl implements DaoFilms {
         String sql = "SELECT * FROM films";
         try {
             return jdbcTemplate.query(sql, (rs, num) -> DaoFactoryModel.makeFilm(rs, jdbcTemplate));
+        } catch (EmptyResultDataAccessException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public List<Film> getFilmsByDirector(Integer directorId, String sortBy) {
+        try {
+            String sql;
+            if (sortBy.equals("year")) {
+                sql = "SELECT f.film_id, f.name, f.description, f.release_date, f.duration, f.rating_id, r.name " +
+                        "FROM films AS f " +
+                        "JOIN ratings AS r ON f.rating_id = r.rating_id " +
+                        "JOIN film_director AS fd ON f.film_id = fd.film_id " +
+                        "WHERE fd.director_id = ? " +
+                        "ORDER BY release_date ";
+                return jdbcTemplate.query(sql, (rs, num) -> DaoFactoryModel.makeFilm(rs, jdbcTemplate), directorId);
+            }
+            if (sortBy.equals("likes")) {
+                sql = "SELECT f.film_id, f.name, f.description, f.release_date, f.duration, f.rating_id, r.name, " +
+                        "COUNT(l.user_id) AS likes_count " +
+                        "FROM films AS f " +
+                        "JOIN ratings AS r ON f.rating_id = r.rating_id " +
+                        "JOIN film_director AS fd ON f.film_id = fd.film_id " +
+                        "LEFT JOIN likes AS l ON f.film_id = l.film_id " +
+                        "WHERE fd.director_id = ? " +
+                        "GROUP BY f.film_id " +
+                        "ORDER BY likes_count DESC ";
+                return jdbcTemplate.query(sql, (rs, num) -> DaoFactoryModel.makeFilm(rs, jdbcTemplate), directorId);
+            }
+            return new ArrayList<>();
         } catch (EmptyResultDataAccessException e) {
             return new ArrayList<>();
         }
