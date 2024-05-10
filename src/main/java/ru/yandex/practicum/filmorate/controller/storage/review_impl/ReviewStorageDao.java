@@ -3,8 +3,6 @@ package ru.yandex.practicum.filmorate.controller.storage.review_impl;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.controller.dao.DaoReviewDislikes;
-import ru.yandex.practicum.filmorate.controller.dao.DaoReviewLikes;
 import ru.yandex.practicum.filmorate.controller.dao.DaoReviews;
 import ru.yandex.practicum.filmorate.controller.storage.ReviewStorage;
 import ru.yandex.practicum.filmorate.model.Review;
@@ -17,11 +15,7 @@ import java.util.List;
 public class ReviewStorageDao implements ReviewStorage {
 
     @Qualifier("DaoReviewsImpl")
-    private DaoReviews daoReviews;
-    @Qualifier("DaoReviewLikesImpl")
-    private DaoReviewLikes daoReviewLikes;
-    @Qualifier("DaoReviewDislikesImpl")
-    private DaoReviewDislikes daoReviewDislikes;
+    private final DaoReviews daoReviews;
 
     @Override
     public Review addReview(Review review) {
@@ -30,20 +24,17 @@ public class ReviewStorageDao implements ReviewStorage {
 
     @Override
     public Review getReview(int id) {
-        Review review = daoReviews.getReview(id);
-        return review;
+        return daoReviews.getReview(id);
     }
 
     @Override
     public List<Review> getFilmReviews(int filmId, int count) {
-        List<Review> filmReviews = daoReviews.getFilmReviews(filmId, count);
-        return filmReviews;
+        return daoReviews.getFilmReviews(filmId, count);
     }
 
     @Override
     public List<Review> getAllReviews() {
-        List<Review> allReviews = daoReviews.getAllReviews();
-        return allReviews;
+        return daoReviews.getAllReviews();
     }
 
     @Override
@@ -58,22 +49,22 @@ public class ReviewStorageDao implements ReviewStorage {
 
     @Override
     public void addLike(int reviewId, int userId) {
-        daoReviewLikes.addLike(reviewId, userId);
+        daoReviews.addLike(reviewId, userId);
     }
 
     @Override
     public void deleteLike(int reviewId, int userId) {
-        daoReviewLikes.deleteLike(reviewId, userId);
+        daoReviews.deleteLike(reviewId, userId);
     }
 
     @Override
     public void addDislike(int reviewId, int userId) {
-        daoReviewDislikes.addDislike(reviewId, userId);
+        daoReviews.addDislike(reviewId, userId);
     }
 
     @Override
     public void deleteDislike(int reviewId, int userId) {
-        daoReviewDislikes.deleteDislike(reviewId, userId);
+        daoReviews.deleteDislike(reviewId, userId);
     }
 
 }

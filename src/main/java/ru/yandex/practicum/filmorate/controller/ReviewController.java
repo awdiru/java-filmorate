@@ -21,7 +21,7 @@ import java.util.Optional;
 public class ReviewController {
 
     @Qualifier("ReviewServiceImpl")
-    private ReviewService reviewService;
+    private final ReviewService reviewService;
 
     @GetMapping("/{id}")
     public Review getReview(@PathVariable int id) {
@@ -34,11 +34,10 @@ public class ReviewController {
     }
 
     @GetMapping
-    public List<Review> getReviews(@RequestParam Optional<Integer> filmId, @RequestParam Optional<Integer> count) {
+    public List<Review> getReviews(@RequestParam Optional<Integer> filmId, @RequestParam(defaultValue = "10") int count) {
         try {
             if (filmId.isPresent()) {
-                if (count.isPresent()) return reviewService.getFilmReviews(filmId.get(), count.get());
-                return reviewService.getFilmReviews(filmId.get(), 10);
+                return reviewService.getFilmReviews(filmId.get(), count);
             }
             return reviewService.getAllReviews();
         } catch (IncorrectIdException e) {

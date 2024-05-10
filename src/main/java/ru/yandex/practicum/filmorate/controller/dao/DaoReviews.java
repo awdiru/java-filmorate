@@ -41,7 +41,7 @@ public interface DaoReviews {
     /**
      * Обновить отзыв
      *
-     * @param review обновлямый отзыв
+     * @param review обновляемый отзыв
      * @return обновленный отзыв
      */
     Review updateReview(Review review);
@@ -52,4 +52,36 @@ public interface DaoReviews {
      * @param id идентификатор удаляемого отзыва
      */
     void deleteReview(int id);
+
+    /**
+     * Добавить like отзыву
+     *
+     * @param reviewId идентификатор отзыва
+     * @param userId   идентификатор пользователя
+     */
+    void addLike(int reviewId, int userId);
+
+    /**
+     * Удалить like с отзыва
+     *
+     * @param reviewId идентификатор отзыва
+     * @param userId   идентификатор пользователя
+     */
+    void deleteLike(int reviewId, int userId);
+
+    /**
+     * Добавить dislike отзыву
+     *
+     * @param reviewId идентификатор отзыва
+     * @param userId   идентификатор пользователя
+     */
+    void addDislike(int reviewId, int userId);
+
+    /**
+     * Удалить dislike с отзыва
+     *
+     * @param reviewId идентификатор отзыва
+     * @param userId   идентификатор пользователя
+     */
+    void deleteDislike(int reviewId, int userId);
 }
