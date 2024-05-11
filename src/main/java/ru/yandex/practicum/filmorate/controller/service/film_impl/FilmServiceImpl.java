@@ -54,7 +54,9 @@ public class FilmServiceImpl implements FilmService {
     }
 
     @Override
-    public List<Film> commonFilmsWithFriend(Integer userId, Integer friendId) {
+    public List<Film> commonFilmsWithFriend(Integer userId, Integer friendId) throws IncorrectIdException {
+        userService.search(userId);
+        userService.search(friendId);
         return filmStorage.commonFilmsWithFriend(userId, friendId);
     }
 

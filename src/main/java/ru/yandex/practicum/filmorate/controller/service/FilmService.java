@@ -42,7 +42,7 @@ public interface FilmService {
      * @param friendId идентификатор друга
      * @return список фильмов
      */
-    List<Film> commonFilmsWithFriend(Integer userId, Integer friendId);
+    List<Film> commonFilmsWithFriend(Integer userId, Integer friendId) throws IncorrectIdException;
 
     /**
      * Обновить фильм

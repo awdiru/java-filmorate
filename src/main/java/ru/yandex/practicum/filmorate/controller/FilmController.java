@@ -39,7 +39,12 @@ public class FilmController {
     @GetMapping("/common")
     public List<Film> commonFilmsWithFriend(@RequestParam Integer userId,
                                             @RequestParam Integer friendId) {
-        return filmService.commonFilmsWithFriend(userId, friendId);
+        try {
+            return filmService.commonFilmsWithFriend(userId, friendId);
+        } catch (IncorrectIdException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Ошибка поиска общих фильмов! " + e.getMessage());
+        }
     }
 
     @PutMapping
