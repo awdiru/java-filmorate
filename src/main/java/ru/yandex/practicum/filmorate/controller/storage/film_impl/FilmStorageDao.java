@@ -48,12 +48,6 @@ public class FilmStorageDao implements FilmStorage {
         return search(idFilm);
     }
 
-    /*
-        @Override
-        public List<Film> getNPopularFilms(int n) {
-            return daoLikes.getPop(n);
-        }
-    */
     @Override
     public Film add(Film film) {
         if (film == null) return null;

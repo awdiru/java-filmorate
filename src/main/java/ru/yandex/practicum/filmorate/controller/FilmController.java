@@ -93,8 +93,10 @@ public class FilmController {
                                @RequestParam(required = false) Integer year) {
         try {
             return filmService.getNPopularFilms(count, genreId, year);
-        } catch (IncorrectIdException | IncorrectYearException e) {
+        } catch (IncorrectIdException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Ошибка вывода популярных фильмов! " + e.getMessage());
+        } catch (IncorrectYearException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ошибка вывода популярных фильмов! " + e.getMessage());
         }
     }
 
