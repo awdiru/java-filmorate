@@ -85,6 +85,48 @@ public class DaoFilmsImpl implements DaoFilms {
     }
 
     @Override
+    public List<Film> searchByParam(String query, List<String> by) {
+        List<Film> result;
+
+        if (query == null || query.isEmpty()) {
+            query = "%";
+        } else {
+            query = "%" + query + "%";
+        }
+
+        if (by.contains("director") && by.contains("title")) {
+            String sqlByDirectorOrTitle = "SELECT f.*, COALESCE(l.count, 0) AS likes_count FROM films AS f " +
+                    "LEFT JOIN (SELECT likes.film_id, count(user_id) AS count " +
+                    "FROM likes GROUP BY likes.film_id) AS l ON f.film_id = l.film_id " +
+                    "WHERE f.film_id IN (SELECT fd.film_id FROM directors AS d " +
+                    "INNER JOIN film_director AS fd ON d.director_id = fd.director_id " +
+                    "WHERE LOWER(d.name) LIKE LOWER(?)) OR LOWER(f.name) LIKE LOWER(?) " +
+                    "ORDER BY likes_count DESC";
+            result = jdbcTemplate.query(sqlByDirectorOrTitle,
+                    ((rs, rowNum) -> DaoFactoryModel.makeFilm(rs, jdbcTemplate)), query, query);
+        } else if (by.contains("director")) {
+            String sqlByDirector = "SELECT f.*, COALESCE(l.count, 0) AS likes_count FROM films AS f " +
+                    "LEFT JOIN (SELECT likes.film_id, count(user_id) AS count " +
+                    "FROM likes GROUP BY likes.film_id) AS l ON f.film_id = l.film_id " +
+                    "WHERE f.film_id IN (SELECT fd.film_id FROM directors AS d " +
+                    "INNER JOIN film_director AS fd ON d.director_id = fd.director_id " +
+                    "WHERE LOWER(d.name) LIKE LOWER(?)) " +
+                    "ORDER BY likes_count DESC";
+            result = jdbcTemplate.query(sqlByDirector,
+                    ((rs, rowNum) -> DaoFactoryModel.makeFilm(rs, jdbcTemplate)), query);
+        } else {
+            String sqlByTitle = "SELECT f.*, COALESCE(l.count, 0) AS likes_count FROM films AS f " +
+                    "LEFT JOIN (SELECT likes.film_id, count(user_id) AS count " +
+                    "FROM likes GROUP BY likes.film_id) AS l ON f.film_id = l.film_id " +
+                    "WHERE LOWER(f.name) LIKE LOWER(?) " +
+                    "ORDER BY likes_count DESC";
+            result = jdbcTemplate.query(sqlByTitle,
+                    ((rs, rowNum) -> DaoFactoryModel.makeFilm(rs, jdbcTemplate)), query);
+        }
+        return result;
+    }
+
+    @Override
     public List<Film> findAll() {
         String sql = "SELECT * FROM films order by film_id asc";
         try {

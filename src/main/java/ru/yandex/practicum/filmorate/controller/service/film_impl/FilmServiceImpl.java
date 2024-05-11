@@ -12,7 +12,7 @@ import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
 import ru.yandex.practicum.filmorate.exceptions.IncorrectYearException;
 import ru.yandex.practicum.filmorate.model.Film;
 
-import java.util.*;
+import java.util.List;
 
 @Service
 @Qualifier("FilmServiceImpl")
@@ -74,6 +74,12 @@ public class FilmServiceImpl implements FilmService {
     }
 
     @Override
+    public List<Film> searchByParam(String query, List<String> by) {
+        query = protectedInjection(query);
+        return filmStorage.searchByParam(query, by);
+    }
+
+    @Override
     public List<Film> findAll() {
         return filmStorage.findAll();
     }
@@ -92,5 +98,11 @@ public class FilmServiceImpl implements FilmService {
     public List<Film> getFilmsByDirector(Integer directorId, String sortBy) throws IncorrectIdException {
         directorService.getById(directorId);
         return filmStorage.getFilmsByDirector(directorId, sortBy);
+    }
+
+    private String protectedInjection(String str) {
+        str = str.replace(";", "");
+        str = str.replace("\"", "\\\"");
+        return str;
     }
 }

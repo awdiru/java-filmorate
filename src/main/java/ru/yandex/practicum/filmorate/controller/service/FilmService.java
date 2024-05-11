@@ -60,6 +60,15 @@ public interface FilmService {
     Film search(int id) throws IncorrectIdException;
 
     /**
+     * Поиск фильма по параметрам
+     *
+     * @param query текст для поиска
+     * @param by лист значений: director (поиск по режиссёру), title (поиск по названию)
+     * @return список найденных фильмов или пустой список
+     */
+     List<Film> searchByParam(String query, List<String> by);
+
+    /**
      * Вернуть список всех фильмов
      *
      * @return список всех фильмов

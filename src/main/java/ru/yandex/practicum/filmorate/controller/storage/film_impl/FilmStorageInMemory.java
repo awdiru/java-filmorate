@@ -114,6 +114,11 @@ public class FilmStorageInMemory implements FilmStorage {
     }
 
     @Override
+    public List<Film> searchByParam(String query, List<String> by) {
+        return List.of();
+    }
+
+    @Override
     public List<Film> findAll() {
         return List.copyOf(films.values());
     }

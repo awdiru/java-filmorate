@@ -93,6 +93,11 @@ public class FilmStorageDao implements FilmStorage {
     }
 
     @Override
+    public List<Film> searchByParam(String query, List<String> by) {
+        return daoFilms.searchByParam(query, by);
+    }
+
+    @Override
     public List<Film> findAll() {
         return daoFilms.findAll();
     }
