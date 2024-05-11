@@ -79,7 +79,7 @@ public class FilmStorageInMemory implements FilmStorage {
     }
 
     @Override
-    public List<Film> searchByParam(String query, boolean findByDirector, boolean findByTitle) {
+    public List<Film> searchByParam(String query, List<String> by) {
         return List.of();
     }
 

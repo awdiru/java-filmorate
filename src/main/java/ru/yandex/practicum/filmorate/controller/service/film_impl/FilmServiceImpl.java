@@ -10,7 +10,7 @@ import ru.yandex.practicum.filmorate.controller.storage.FilmStorage;
 import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
 import ru.yandex.practicum.filmorate.model.Film;
 
-import java.util.*;
+import java.util.List;
 
 @Service
 @Qualifier("FilmServiceImpl")
@@ -73,23 +73,9 @@ public class FilmServiceImpl implements FilmService {
     }
 
     @Override
-    public List<Film> searchByParam(String query, String by) {
+    public List<Film> searchByParam(String query, List<String> by) {
         query = protectedInjection(query);
-        boolean director = false;
-        boolean title = false;
-        if (by == null) {
-            by = "";
-        }
-        String[] splitBy = by.split(",");
-        for (int i = 0; i < splitBy.length; i++) {
-            if (splitBy[i].trim().equalsIgnoreCase("director")) {
-                director = true;
-            }
-            if (splitBy[i].trim().equalsIgnoreCase("title")) {
-                title = true;
-            }
-        }
-        return filmStorage.searchByParam(query, director, title);
+        return filmStorage.searchByParam(query, by);
     }
 
     @Override

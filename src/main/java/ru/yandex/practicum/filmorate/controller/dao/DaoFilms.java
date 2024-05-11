@@ -41,11 +41,10 @@ public interface DaoFilms {
      * Поиск фильма по параметрам
      *
      * @param query текст для поиска
-     * @param findByDirector указатель для поиска по режиссеру
-     * @param findByTitle указатель для поиска по назканию
+     * @param by лист значений: director (поиск по режиссёру), title (поиск по названию)
      * @return список найденных фильмов или пустой список
      */
-    List<Film> searchByParam(String query, boolean findByDirector, boolean findByTitle);
+    List<Film> searchByParam(String query, List<String> by);
 
     /**
      * Вернуть список всех фильмов

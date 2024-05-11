@@ -70,10 +70,10 @@ public interface FilmService {
      * Поиск фильма по параметрам
      *
      * @param query текст для поиска
-     * @param by значения director (поиск по режиссёру), title (поиск по названию)
+     * @param by лист значений: director (поиск по режиссёру), title (поиск по названию)
      * @return список найденных фильмов или пустой список
      */
-     List<Film> searchByParam(String query, String by);
+     List<Film> searchByParam(String query, List<String> by);
 
     /**
      * Вернуть список всех фильмов

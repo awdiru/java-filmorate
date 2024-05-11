@@ -85,7 +85,7 @@ public class DaoFilmsImpl implements DaoFilms {
     }
 
     @Override
-    public List<Film> searchByParam(String query, boolean findByDirector, boolean findByTitle) {
+    public List<Film> searchByParam(String query, List<String> by) {
         List<Film> result;
 
         if (query == null || query.isEmpty()) {
@@ -94,7 +94,7 @@ public class DaoFilmsImpl implements DaoFilms {
             query = "%" + query + "%";
         }
 
-        if (findByDirector && findByTitle) {
+        if (by.contains("director") && by.contains("title")) {
             String sqlByDirectorOrTitle = "SELECT f.*, COALESCE(l.count, 0) AS likes_count FROM films AS f " +
                     "LEFT JOIN (SELECT likes.film_id, count(user_id) AS count " +
                     "FROM likes GROUP BY likes.film_id) AS l ON f.film_id = l.film_id " +
@@ -104,7 +104,7 @@ public class DaoFilmsImpl implements DaoFilms {
                     "ORDER BY likes_count DESC";
             result = jdbcTemplate.query(sqlByDirectorOrTitle,
                     ((rs, rowNum) -> DaoFactoryModel.makeFilm(rs, jdbcTemplate)), query, query);
-        } else if (findByDirector) {
+        } else if (by.contains("director")) {
             String sqlByDirector = "SELECT f.*, COALESCE(l.count, 0) AS likes_count FROM films AS f " +
                     "LEFT JOIN (SELECT likes.film_id, count(user_id) AS count " +
                     "FROM likes GROUP BY likes.film_id) AS l ON f.film_id = l.film_id " +

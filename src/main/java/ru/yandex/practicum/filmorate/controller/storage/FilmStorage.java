@@ -67,12 +67,11 @@ public interface FilmStorage {
     /**
      * Поиск фильма по параметрам
      *
-     * @param query          текст для поиска
-     * @param findByDirector указатель для поиска по режиссеру
-     * @param findByTitle    указатель для поиска по назканию
+     * @param query текст для поиска
+     * @param by указатель для поиска по режиссеру
      * @return список найденных фильмов или пустой список
      */
-    List<Film> searchByParam(String query, boolean findByDirector, boolean findByTitle);
+    List<Film> searchByParam(String query, List<String> by);
 
     /**
      * Вернуть список всех фильмов
