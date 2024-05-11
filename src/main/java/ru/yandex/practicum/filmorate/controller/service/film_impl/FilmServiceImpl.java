@@ -7,7 +7,9 @@ import ru.yandex.practicum.filmorate.controller.service.DirectorService;
 import ru.yandex.practicum.filmorate.controller.service.FilmService;
 import ru.yandex.practicum.filmorate.controller.service.UserService;
 import ru.yandex.practicum.filmorate.controller.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.controller.storage.GenreStorage;
 import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
+import ru.yandex.practicum.filmorate.exceptions.IncorrectYearException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.*;
@@ -16,15 +18,19 @@ import java.util.*;
 @Qualifier("FilmServiceImpl")
 public class FilmServiceImpl implements FilmService {
     private final FilmStorage filmStorage;
+    private final GenreStorage genreStorage;
     private final UserService userService;
     private final DirectorService directorService;
 
     @Autowired
     public FilmServiceImpl(@Qualifier("FilmStorageDao") FilmStorage filmStorage,
                            @Qualifier("UserServiceImpl") UserService userService,
+                           @Qualifier("GenreStorageDao") GenreStorage genreStorage,
                            @Qualifier("DirectorServiceImpl") DirectorService directorService) {
+
         this.filmStorage = filmStorage;
         this.userService = userService;
+        this.genreStorage = genreStorage;
         this.directorService = directorService;
     }
 
@@ -40,11 +46,6 @@ public class FilmServiceImpl implements FilmService {
         search(idFilm);
         userService.search(idUser);
         return filmStorage.deleteLike(idFilm, idUser);
-    }
-
-    @Override
-    public List<Film> getNPopularFilms(int n) {
-        return filmStorage.getNPopularFilms(n);
     }
 
     @Override
@@ -75,6 +76,16 @@ public class FilmServiceImpl implements FilmService {
     @Override
     public List<Film> findAll() {
         return filmStorage.findAll();
+    }
+
+    @Override
+    public List<Film> getNPopularFilms(Integer n, Integer genreId, Integer year) throws
+            IncorrectIdException, IncorrectYearException {
+        if (genreId != null && genreStorage.getById(genreId) == null)
+            throw new IncorrectIdException("Жанр с id " + genreId + " не найден.");
+        if (year != null && year < 1895)
+            throw new IncorrectYearException("Год не может быть раньше 1895.");
+        return filmStorage.getNPopularFilms(n, genreId, year);
     }
 
     @Override
