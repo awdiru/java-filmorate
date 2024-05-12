@@ -13,6 +13,7 @@ import ru.yandex.practicum.filmorate.controller.dao.impl.DaoFilmsImpl;
 import ru.yandex.practicum.filmorate.controller.dao.impl.DaoGenresImpl;
 import ru.yandex.practicum.filmorate.controller.dao.impl.DaoLikesImpl;
 import ru.yandex.practicum.filmorate.controller.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 
@@ -40,7 +41,7 @@ public class FilmStorageDao implements FilmStorage {
     public Film addLike(int idFilm, int idUser) {
         if (daoLikes.findAllIdUsersLikesFilm(idFilm).stream()
                 .anyMatch(integer -> integer.equals(idUser))) {
-            throw new RuntimeException(String.format("%s уже лайкал фильм %s", idUser, idFilm));
+            return search(idFilm);
         }
         daoLikes.addLike(idFilm, idUser);
         return search(idFilm);
