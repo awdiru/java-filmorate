@@ -6,8 +6,6 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.controller.service.FeedService;
 import ru.yandex.practicum.filmorate.controller.storage.FeedStorage;
 import ru.yandex.practicum.filmorate.model.Event;
-import ru.yandex.practicum.filmorate.model.EventType;
-import ru.yandex.practicum.filmorate.model.Operation;
 
 import java.time.Instant;
 import java.util.List;

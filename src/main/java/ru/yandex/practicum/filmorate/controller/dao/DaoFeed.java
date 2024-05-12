@@ -18,7 +18,7 @@ public interface DaoFeed {
      * Добавить событие
      *
      * @param event событие
-     * @return добавленое событие
+     * @return добавленное событие
      */
     Event addEvent(Event event);
 }

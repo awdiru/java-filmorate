@@ -72,7 +72,7 @@ public class UserController {
             return userService.getFeed(id);
         } catch (IncorrectIdException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "Ошибка поиска пользователя! " + e.getMessage());
+                    "Ошибка получения ленты событий! " + e.getMessage());
         }
     }
 
@@ -107,7 +107,7 @@ public class UserController {
             getFriends = userService.getFriends(id);
         } catch (IncorrectIdException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "Ошибка получения ленты событий! " + e.getMessage());
+                    "Ошибка возвращения списка друзей! " + e.getMessage());
         }
         return getFriends;
     }

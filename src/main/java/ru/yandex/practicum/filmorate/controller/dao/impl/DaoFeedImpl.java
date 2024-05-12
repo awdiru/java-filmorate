@@ -9,8 +9,8 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.controller.dao.DaoFeed;
 import ru.yandex.practicum.filmorate.model.Event;
-import ru.yandex.practicum.filmorate.model.EventType;
-import ru.yandex.practicum.filmorate.model.Operation;
+import ru.yandex.practicum.filmorate.controller.service.feed_impl.EventType;
+import ru.yandex.practicum.filmorate.controller.service.feed_impl.Operation;
 
 import java.sql.Timestamp;
 import java.time.Instant;
