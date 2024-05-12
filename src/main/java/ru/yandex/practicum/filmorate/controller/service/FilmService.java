@@ -36,6 +36,15 @@ public interface FilmService {
     Film add(Film film);
 
     /**
+     * Получить общие с другом фильмы.
+     *
+     * @param userId   идентификатор пользователя
+     * @param friendId идентификатор друга
+     * @return список фильмов
+     */
+    List<Film> commonFilmsWithFriend(Integer userId, Integer friendId) throws IncorrectIdException;
+
+    /**
      * Обновить фильм
      *
      * @param film обновляемый фильм

@@ -38,8 +38,17 @@ public class FilmStorageDao implements FilmStorage {
 
     @Override
     public Film addLike(int idFilm, int idUser) {
+        if (daoLikes.findAllIdUsersLikesFilm(idFilm).stream()
+                .anyMatch(integer -> integer.equals(idUser))) {
+            throw new RuntimeException(String.format("%s уже лайкал фильм %s", idUser, idFilm));
+        }
         daoLikes.addLike(idFilm, idUser);
         return search(idFilm);
+    }
+
+    @Override
+    public List<Film> commonFilmsWithFriend(Integer userId, Integer friendId) {
+        return daoFilms.commonFilmsWithFriend(userId, friendId);
     }
 
     @Override

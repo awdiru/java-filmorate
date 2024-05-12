@@ -6,15 +6,18 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 import ru.yandex.practicum.filmorate.controller.dao.DaoDirectors;
 import ru.yandex.practicum.filmorate.controller.dao.DaoFilms;
 import ru.yandex.practicum.filmorate.controller.dao.DaoGenres;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 @Qualifier("DaoFilmsImpl")
@@ -47,6 +50,26 @@ public class DaoFilmsImpl implements DaoFilms {
         film.setId(simpleJdbcInsert.executeAndReturnKey(values).intValue());
 
         return film;
+    }
+
+    @Override
+    public List<Film> commonFilmsWithFriend(Integer userId, Integer friendId) {
+        String sqlFilmIds = "SELECT film_id FROM likes WHERE user_id = ? OR user_id = ? " +
+                "GROUP BY film_id HAVING count(user_id) > 1";
+        List<Integer> filmIds = jdbcTemplate.queryForList(sqlFilmIds, Integer.class, userId, friendId);
+
+        if (CollectionUtils.isEmpty(filmIds)) {
+            return Collections.emptyList();
+        }
+
+        String sql = String.format("SELECT * FROM films f WHERE f.film_id IN (%s) " +
+                        "ORDER BY (SELECT COUNT(user_id) FROM likes l WHERE l.film_id = f.film_id) DESC",
+                filmIds.stream().map(String::valueOf).collect(Collectors.joining(",")));
+        try {
+            return jdbcTemplate.query(sql, (rs, num) -> DaoFactoryModel.makeFilm(rs, jdbcTemplate));
+        } catch (EmptyResultDataAccessException e) {
+            return Collections.emptyList();
+        }
     }
 
     @Override
