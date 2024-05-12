@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.controller.service.review_impl;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.controller.service.FeedService;
 import ru.yandex.practicum.filmorate.controller.service.FilmService;
 import ru.yandex.practicum.filmorate.controller.service.ReviewService;
 import ru.yandex.practicum.filmorate.controller.service.UserService;
@@ -23,12 +24,16 @@ public class ReviewServiceImpl implements ReviewService {
     private final FilmService filmService;
     @Qualifier("UserServiceImpl")
     private final UserService userService;
+    @Qualifier("FeedServiceImpl")
+    private final FeedService feedService;
 
     @Override
     public Review addReview(Review review) throws IncorrectIdException {
         filmService.search(review.getFilmId());
         userService.search(review.getUserId());
-        return reviewStorage.addReview(review);
+        Review addedReview = reviewStorage.addReview(review);
+        feedService.addAddReviewEvent(review.getUserId(), addedReview.getReviewId());
+        return addedReview;
     }
 
     @Override
@@ -53,13 +58,15 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public Review updateReview(Review review) throws IncorrectIdException {
-        getReview(review.getReviewId());
+        Review currentReview = getReview(review.getReviewId());
+        feedService.addUpdateReviewEvent(currentReview.getUserId(), currentReview.getReviewId());
         return reviewStorage.updateReview(review);
     }
 
     @Override
     public void deleteReview(int id) throws IncorrectIdException {
-        getReview(id);
+        Review review = getReview(id);
+        feedService.addRemoveReviewEvent(review.getUserId(), review.getReviewId());
         reviewStorage.deleteReview(id);
     }
 

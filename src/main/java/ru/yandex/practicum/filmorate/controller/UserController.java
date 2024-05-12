@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -9,9 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ru.yandex.practicum.filmorate.controller.service.UserService;
 import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
+import ru.yandex.practicum.filmorate.model.Event;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
-
 
 import javax.validation.Valid;
 import java.util.List;
@@ -67,6 +66,16 @@ public class UserController {
         }
     }
 
+    @GetMapping("/{id}/feed")
+    public List<Event> getFeed(@PathVariable int id) {
+        try {
+            return userService.getFeed(id);
+        } catch (IncorrectIdException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Ошибка поиска пользователя! " + e.getMessage());
+        }
+    }
+
     @PutMapping("/{id}/friends/{friendId}")
     public User addFriend(@PathVariable int id, @PathVariable int friendId) {
         User user;
@@ -98,7 +107,7 @@ public class UserController {
             getFriends = userService.getFriends(id);
         } catch (IncorrectIdException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "Ошибка возвращения списка друзей! " + e.getMessage());
+                    "Ошибка получения ленты событий! " + e.getMessage());
         }
         return getFriends;
     }
