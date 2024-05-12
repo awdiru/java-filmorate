@@ -13,7 +13,6 @@ import ru.yandex.practicum.filmorate.controller.dao.impl.DaoFilmsImpl;
 import ru.yandex.practicum.filmorate.controller.dao.impl.DaoGenresImpl;
 import ru.yandex.practicum.filmorate.controller.dao.impl.DaoLikesImpl;
 import ru.yandex.practicum.filmorate.controller.storage.FilmStorage;
-import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 
