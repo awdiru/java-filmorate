@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.controller.service;
 
 import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
+import ru.yandex.practicum.filmorate.model.Event;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 
@@ -79,10 +80,21 @@ public interface UserService {
     User search(int id) throws IncorrectIdException;
 
     /**
+     * Лента событий пользователя
+     *
+     * @param userId идентификатор пользователя
+     * @return лента событий
+     * @throws IncorrectIdException
+     */
+
+    List<Event> getFeed(int userId) throws IncorrectIdException;
+
+    /**
      * Вернуть список всех пользователей
      *
      * @return список всех пользователей
      */
+
     List<User> findAll();
 
     /**
