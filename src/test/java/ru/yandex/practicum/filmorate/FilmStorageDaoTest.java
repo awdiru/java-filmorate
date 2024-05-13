@@ -130,7 +130,7 @@ public class FilmStorageDaoTest {
         userStorage.add(user);
 
         filmStorage.addLike(1, 1);
-        filmStorage.delLike(1, 1);
+        filmStorage.deleteLike(1, 1);
 
         Film sevedFilm = filmStorage.search(1);
         assertThat(sevedFilm)
@@ -175,7 +175,7 @@ public class FilmStorageDaoTest {
         film.getLikes().add(1);
         popFilms.add(film);
 
-        List<Film> searchPopFilm = filmStorage.popFilms(5);
+        List<Film> searchPopFilm = filmStorage.getNPopularFilms(5, null, null);
         assertThat(searchPopFilm)
                 .isNotNull()
                 .usingRecursiveComparison()
@@ -186,7 +186,7 @@ public class FilmStorageDaoTest {
     private Film createFilm() {
         return new Film(1, "filmName", "filmDescription",
                 LocalDate.of(1990, 01, 01), 1000,
-                new Rating(1, "G"), new LinkedList<>(), new LinkedList<>());
+                new Rating(1, "G"), new LinkedList<>(), new LinkedList<>(), new LinkedList<>());
     }
 
     private User createUser() {

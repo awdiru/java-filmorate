@@ -3,6 +3,8 @@ package ru.yandex.practicum.filmorate.controller.dao;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public interface DaoLikes {
     /**
@@ -18,7 +20,6 @@ public interface DaoLikes {
      *
      * @param idFilm идентификатор фильма
      * @param idUser идентификатор пользователя
-     * @return
      */
     void delLike(int idFilm, int idUser);
 
@@ -30,12 +31,20 @@ public interface DaoLikes {
      */
     List<Integer> findAllIdUsersLikesFilm(int idFilm);
 
+    /**
+     * Вернуть список идентификаторов пользователей с их лайками
+     *
+     * @return список лайков
+     */
+    Map<Integer, Set<Integer>> getAllUserIdWithLikes();
 
     /**
-     * Вернуть список из n самых популярных фильмов
+     * Вернуть список самых популярных фильмов одного жанра за один год
      *
-     * @param n количество фильмов в списке
-     * @return список популярных фильмов
+     * @param n       количество фильмов
+     * @param genreId идентификатор жанра
+     * @param year    год
+     * @return список фильмов
      */
-    List<Film> getPop(int n);
+    List<Film> getNPopularFilms(Integer n, Integer genreId, Integer year);
 }

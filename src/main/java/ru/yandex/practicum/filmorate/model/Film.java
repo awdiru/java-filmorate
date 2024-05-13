@@ -1,6 +1,8 @@
 package ru.yandex.practicum.filmorate.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import ru.yandex.practicum.filmorate.annotation.films.realeseDate.AcceptableReleaseDate;
 
 import javax.validation.constraints.NotBlank;
@@ -37,4 +39,6 @@ public class Film {
     private List<Integer> likes;
     @EqualsAndHashCode.Exclude
     private List<Genre> genres;
+    @EqualsAndHashCode.Exclude
+    private List<Director> directors;
 }

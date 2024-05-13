@@ -3,9 +3,12 @@ package ru.yandex.practicum.filmorate.controller.service.user_impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.controller.service.FeedService;
 import ru.yandex.practicum.filmorate.controller.service.UserService;
 import ru.yandex.practicum.filmorate.controller.storage.UserStorage;
 import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
+import ru.yandex.practicum.filmorate.model.Event;
+import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.List;
@@ -14,16 +17,19 @@ import java.util.List;
 @Qualifier("UserServiceImpl")
 public class UserServiceImpl implements UserService {
     private final UserStorage userStorage;
+    private final FeedService feedService;
 
     @Autowired
-    public UserServiceImpl(@Qualifier("UserStorageDao") UserStorage userStorage) {
+    public UserServiceImpl(@Qualifier("UserStorageDao") UserStorage userStorage, @Qualifier("FeedServiceImpl") FeedService feedService) {
         this.userStorage = userStorage;
+        this.feedService = feedService;
     }
 
     @Override
     public User addFriend(int idUser, int idFriend) throws IncorrectIdException {
         search(idUser);
         search(idFriend);
+        feedService.addAddFriendEvent(idUser, idFriend);
         return userStorage.addFriend(idUser, idFriend);
     }
 
@@ -31,6 +37,7 @@ public class UserServiceImpl implements UserService {
     public User deleteFriend(int idUser, int idFriend) throws IncorrectIdException {
         search(idUser);
         search(idFriend);
+        feedService.addRemoveFriendEvent(idUser, idFriend);
         return userStorage.deleteFriend(idUser, idFriend);
     }
 
@@ -74,7 +81,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<Event> getFeed(int userId) throws IncorrectIdException {
+        search(userId);
+        return feedService.getFeed(userId);
+    }
+
+    @Override
     public List<User> findAll() {
         return userStorage.findAll();
+    }
+
+    @Override
+    public List<Film> getRecommendations(int id) throws IncorrectIdException {
+        search(id);
+        return userStorage.getRecommendations(id);
     }
 }

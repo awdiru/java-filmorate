@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.controller.dao.DaoRating;
 import ru.yandex.practicum.filmorate.controller.dao.impl.DaoRatingImpl;
 import ru.yandex.practicum.filmorate.controller.storage.RatingStorage;
-import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
 import ru.yandex.practicum.filmorate.model.Rating;
 
 import java.util.List;
@@ -23,7 +22,7 @@ public class RatingStorageDao implements RatingStorage {
     }
 
     @Override
-    public Rating getById(Integer id) throws IncorrectIdException {
+    public Rating getById(Integer id) {
         return daoRating.getById(id);
     }
 

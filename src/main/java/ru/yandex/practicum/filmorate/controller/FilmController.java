@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ru.yandex.practicum.filmorate.controller.service.FilmService;
 import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
+import ru.yandex.practicum.filmorate.exceptions.IncorrectYearException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import javax.validation.Valid;
@@ -32,7 +33,17 @@ public class FilmController {
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "Ошибка добавления фильма! Переданы некорректные данные.");
+        }
+    }
 
+    @GetMapping("/common")
+    public List<Film> commonFilmsWithFriend(@RequestParam Integer userId,
+                                            @RequestParam Integer friendId) {
+        try {
+            return filmService.commonFilmsWithFriend(userId, friendId);
+        } catch (IncorrectIdException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Ошибка поиска общих фильмов! " + e.getMessage());
         }
     }
 
@@ -41,8 +52,7 @@ public class FilmController {
         try {
             return filmService.update(film);
         } catch (IncorrectIdException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "Ошибка Обновления фильма! " + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Ошибка Обновления фильма! " + e.getMessage());
         }
     }
 
@@ -51,8 +61,7 @@ public class FilmController {
         try {
             return filmService.search(id);
         } catch (IncorrectIdException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "Ошибка поиска фильма! " + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Ошибка поиска фильма! " + e.getMessage());
         }
     }
 
@@ -61,8 +70,7 @@ public class FilmController {
         try {
             return filmService.delete(id);
         } catch (IncorrectIdException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "Ошибка удаления фильма! " + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Ошибка удаления фильма! " + e.getMessage());
         }
     }
 
@@ -71,13 +79,18 @@ public class FilmController {
         return filmService.findAll();
     }
 
+    @GetMapping("/search")
+    public List<Film> searchByParam(@RequestParam String query,
+                                    @RequestParam List<String> by) {
+        return filmService.searchByParam(query, by);
+    }
+
     @PutMapping("/{id}/like/{userId}")
     public Film addLike(@PathVariable int id, @PathVariable int userId) {
         try {
             return filmService.addLike(id, userId);
         } catch (IncorrectIdException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "Ошибка добавления лайка! " + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Ошибка добавления лайка! " + e.getMessage());
         }
     }
 
@@ -85,16 +98,33 @@ public class FilmController {
     public Film delLike(@PathVariable int id, @PathVariable int userId) {
         Film film;
         try {
-            film = filmService.delLike(id, userId);
+            return filmService.delLike(id, userId);
         } catch (IncorrectIdException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "Ошибка добавления лайка! " + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Ошибка добавления лайка! " + e.getMessage());
         }
-        return film;
     }
 
     @GetMapping("/popular")
-    public List<Film> popFilms(@RequestParam(defaultValue = "10") int count) {
-        return filmService.popFilms(count);
+    public List<Film> popFilms(@RequestParam(defaultValue = "10") int count,
+                               @RequestParam(required = false) Integer genreId,
+                               @RequestParam(required = false) Integer year) {
+        try {
+            return filmService.getNPopularFilms(count, genreId, year);
+        } catch (IncorrectIdException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Ошибка вывода популярных фильмов! " + e.getMessage());
+        } catch (IncorrectYearException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ошибка вывода популярных фильмов! " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/director/{directorId}")
+    public List<Film> getFilmsByDirector(@PathVariable("directorId") Integer directorId,
+                                         @RequestParam String sortBy) {
+        try {
+            return filmService.getFilmsByDirector(directorId, sortBy);
+        } catch (IncorrectIdException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Режиссер с указанным id отсутствует в базе! " + e.getMessage());
+        }
     }
 }

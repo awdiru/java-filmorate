@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.controller.storage;
 
-import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
 import ru.yandex.practicum.filmorate.model.Genre;
 
 import java.util.List;
@@ -11,7 +10,7 @@ public interface GenreStorage {
      * @param id идентификатор жанра
      * @return жанр
      */
-    Genre getById(Integer id) throws IncorrectIdException;
+    Genre getById(Integer id);
 
     /**
      * Получить список всех жанров

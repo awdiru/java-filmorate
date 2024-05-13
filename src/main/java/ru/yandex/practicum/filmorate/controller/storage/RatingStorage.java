@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.controller.storage;
 
-import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
 import ru.yandex.practicum.filmorate.model.Rating;
 
 import java.util.List;
@@ -11,7 +10,7 @@ public interface RatingStorage {
      * @param id идентификатор рейтинга
      * @return жанр
      */
-    Rating getById(Integer id) throws IncorrectIdException;
+    Rating getById(Integer id);
 
     /**
      * Получить список всех рейтингов
