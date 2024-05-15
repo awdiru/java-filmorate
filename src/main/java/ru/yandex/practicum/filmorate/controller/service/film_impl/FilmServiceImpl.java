@@ -10,6 +10,7 @@ import ru.yandex.practicum.filmorate.controller.service.UserService;
 import ru.yandex.practicum.filmorate.controller.storage.FilmStorage;
 import ru.yandex.practicum.filmorate.controller.storage.GenreStorage;
 import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
+import ru.yandex.practicum.filmorate.exceptions.IncorrectRatingException;
 import ru.yandex.practicum.filmorate.exceptions.IncorrectYearException;
 import ru.yandex.practicum.filmorate.model.Film;
 
@@ -38,11 +39,12 @@ public class FilmServiceImpl implements FilmService {
     }
 
     @Override
-    public Film addLike(int idFilm, int idUser) throws IncorrectIdException {
+    public Film addLike(int idFilm, int idUser, int rating) throws IncorrectIdException {
         search(idFilm);
         userService.search(idUser);
+        if (rating < 1 || rating > 10) throw new IncorrectRatingException("Рейтинг должен быть от 1 до 10");
         feedService.addAddLikeEvent(idUser, idFilm);
-        return filmStorage.addLike(idFilm, idUser);
+        return filmStorage.addLike(idFilm, idUser, rating);
     }
 
     @Override

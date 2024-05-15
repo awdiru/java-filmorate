@@ -21,7 +21,7 @@ public class FilmTests {
     void filmWithoutErrors() {
         Film film = new Film(1, "filmName", "filmDescription",
                 LocalDate.of(1990, 01, 01), 1000,
-                new Rating(1, "G"), new LinkedList<>(), new LinkedList<>(), new LinkedList<>());
+                new Rating(1, "G"), new LinkedList<>(), new LinkedList<>(), new LinkedList<>(), 0);
         Set<ConstraintViolation<Film>> violations = validator.validate(film);
         for (ConstraintViolation<Film> f : violations) {
             System.out.println("\n" + f + "\n");
@@ -33,7 +33,7 @@ public class FilmTests {
     void filmNameNull() {
         Film film = new Film(1, null, "filmDescription",
                 LocalDate.of(1990, 01, 01), 1000,
-                new Rating(1, "G"), new LinkedList<>(), new LinkedList<>(), new LinkedList<>());
+                new Rating(1, "G"), new LinkedList<>(), new LinkedList<>(), new LinkedList<>(),0);
         Set<ConstraintViolation<Film>> violations = validator.validate(film);
         for (ConstraintViolation<Film> f : violations) {
             System.out.println("\n" + f + "\n");
@@ -50,7 +50,7 @@ public class FilmTests {
         String description = s.toString();
         Film film = new Film(1, "filmName", description,
                 LocalDate.of(1990, 01, 01), 1000,
-                new Rating(1, "G"), new LinkedList<>(), new LinkedList<>(), new LinkedList<>());
+                new Rating(1, "G"), new LinkedList<>(), new LinkedList<>(), new LinkedList<>(),0);
         Set<ConstraintViolation<Film>> violations = validator.validate(film);
         for (ConstraintViolation<Film> f : violations) {
             System.out.println("\n" + f + "\n");
@@ -62,7 +62,7 @@ public class FilmTests {
     void filmReleaseDateIncorrect() {
         Film film = new Film(1, "filmName", "filmDescription",
                 LocalDate.of(1190, 01, 01), 1000,
-                new Rating(1, "G"), new LinkedList<>(), new LinkedList<>(), new LinkedList<>());
+                new Rating(1, "G"), new LinkedList<>(), new LinkedList<>(), new LinkedList<>(),0);
         Set<ConstraintViolation<Film>> violations = validator.validate(film);
         for (ConstraintViolation<Film> f : violations) {
             System.out.println("\n" + f + "\n");
@@ -74,7 +74,7 @@ public class FilmTests {
     void filmReleaseDateNull() {
         Film film = new Film(1, "filmName", "filmDescription",
                 null, 1000,
-                new Rating(1, "G"), new LinkedList<>(), new LinkedList<>(), new LinkedList<>());
+                new Rating(1, "G"), new LinkedList<>(), new LinkedList<>(), new LinkedList<>(),0);
         Set<ConstraintViolation<Film>> violations = validator.validate(film);
         for (ConstraintViolation<Film> f : violations) {
             System.out.println("\n" + f + "\n");
@@ -86,7 +86,7 @@ public class FilmTests {
     void filmDurationNull() {
         Film film = new Film(1, "filmName", "filmDescription",
                 LocalDate.of(1990, 01, 01), null,
-                new Rating(1, "G"), new LinkedList<>(), new LinkedList<>(), new LinkedList<>());
+                new Rating(1, "G"), new LinkedList<>(), new LinkedList<>(), new LinkedList<>(),0);
         Set<ConstraintViolation<Film>> violations = validator.validate(film);
         for (ConstraintViolation<Film> f : violations) {
             System.out.println("\n" + f + "\n");
@@ -103,7 +103,7 @@ public class FilmTests {
         String description = s.toString();
         Film film = new Film(0, null, description,
                 LocalDate.of(1190, 01, 01), -1,
-                null, null, null, null);
+                null, null, null, null,0);
         Set<ConstraintViolation<Film>> violations = validator.validate(film);
         for (ConstraintViolation<Film> f : violations) {
             System.out.println("\n" + f + "\n");

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ru.yandex.practicum.filmorate.controller.service.FilmService;
 import ru.yandex.practicum.filmorate.exceptions.IncorrectIdException;
+import ru.yandex.practicum.filmorate.exceptions.IncorrectRatingException;
 import ru.yandex.practicum.filmorate.exceptions.IncorrectYearException;
 import ru.yandex.practicum.filmorate.model.Film;
 
@@ -65,6 +66,8 @@ public class FilmController {
         }
     }
 
+
+
     @DeleteMapping("/{id}")
     public Film delete(@PathVariable Integer id) {
         try {
@@ -86,11 +89,13 @@ public class FilmController {
     }
 
     @PutMapping("/{id}/like/{userId}")
-    public Film addLike(@PathVariable int id, @PathVariable int userId) {
+    public Film addLike(@PathVariable int id, @PathVariable int userId, @RequestParam int rating) {
         try {
-            return filmService.addLike(id, userId);
+            return filmService.addLike(id, userId, rating);
         } catch (IncorrectIdException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Ошибка добавления лайка! " + e.getMessage());
+        } catch (IncorrectRatingException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ошибка добавления лайка! " + e.getMessage());
         }
     }
 

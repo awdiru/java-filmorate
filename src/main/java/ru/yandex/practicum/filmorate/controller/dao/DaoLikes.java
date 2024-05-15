@@ -12,8 +12,9 @@ public interface DaoLikes {
      *
      * @param idFilm идентификатор фильма
      * @param idUser идентификатор пользователя
+     * @param rating
      */
-    void addLike(int idFilm, int idUser);
+    void addLike(int idFilm, int idUser, int rating);
 
     /**
      * Удалить лайк у фильма
@@ -47,4 +48,12 @@ public interface DaoLikes {
      * @return список фильмов
      */
     List<Film> getNPopularFilms(Integer n, Integer genreId, Integer year);
+
+    /**
+     * Вернуть рейтинг фильма
+     *
+     * @param filmId идентификатор фильма
+     * @return рейтинг фильма
+     */
+    double getRating(int filmId);
 }

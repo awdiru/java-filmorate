@@ -12,10 +12,11 @@ public interface FilmService {
      *
      * @param idFilm идентификатор фильма
      * @param idUser идентификатор пользователя
+     * @param rating оценка пользователя
      * @return обновленный фильм
      * @throws IncorrectIdException некорректный идентификатор
      */
-    Film addLike(int idFilm, int idUser) throws IncorrectIdException;
+    Film addLike(int idFilm, int idUser, int rating) throws IncorrectIdException;
 
     /**
      * Удалить лайк у фильма

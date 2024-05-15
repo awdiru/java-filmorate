@@ -21,7 +21,7 @@ public class FilmStorageInMemory implements FilmStorage {
     }
 
     @Override
-    public Film addLike(int idFilm, int idUser) {
+    public Film addLike(int idFilm, int idUser, int rating) {
         Film film = films.get(idFilm);
         if (film == null) return null;
         film.getLikes().add(idUser);

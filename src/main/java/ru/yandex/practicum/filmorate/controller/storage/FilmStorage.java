@@ -11,9 +11,10 @@ public interface FilmStorage {
      *
      * @param idFilm идентификатор фильма
      * @param idUser идентификатор пользователя
+     * @param rating оценка пользователя
      * @return обновленный фильм
      */
-    Film addLike(int idFilm, int idUser);
+    Film addLike(int idFilm, int idUser, int rating);
 
     /**
      * Получить общие с другом фильмы.

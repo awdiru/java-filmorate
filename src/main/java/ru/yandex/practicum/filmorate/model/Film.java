@@ -41,4 +41,6 @@ public class Film {
     private List<Genre> genres;
     @EqualsAndHashCode.Exclude
     private List<Director> directors;
+    @EqualsAndHashCode.Exclude
+    private double rating;
 }

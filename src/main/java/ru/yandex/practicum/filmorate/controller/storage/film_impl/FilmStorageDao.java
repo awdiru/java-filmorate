@@ -37,12 +37,12 @@ public class FilmStorageDao implements FilmStorage {
     }
 
     @Override
-    public Film addLike(int idFilm, int idUser) {
+    public Film addLike(int idFilm, int idUser, int rating) {
         if (daoLikes.findAllIdUsersLikesFilm(idFilm).stream()
                 .anyMatch(integer -> integer.equals(idUser))) {
             return search(idFilm);
         }
-        daoLikes.addLike(idFilm, idUser);
+        daoLikes.addLike(idFilm, idUser, rating);
         return search(idFilm);
     }
 
@@ -67,10 +67,6 @@ public class FilmStorageDao implements FilmStorage {
         if (film.getGenres() == null) film.setGenres(new LinkedList<>());
         if (film.getDirectors() == null) film.setDirectors(new LinkedList<>());
 
-        if (!film.getLikes().isEmpty()) {
-            for (Integer id : film.getLikes())
-                daoLikes.addLike(film.getId(), id);
-        }
         if (!film.getGenres().isEmpty()) {
             for (Genre g : film.getGenres())
                 daoGenres.addGenreFilm(film.getId(), g.getId());
@@ -98,6 +94,7 @@ public class FilmStorageDao implements FilmStorage {
         Film film = daoFilms.search(id);
         if (film == null) return null;
         film.setLikes(daoLikes.findAllIdUsersLikesFilm(id));
+        film.setRating(daoLikes.getRating(id));
         return film;
     }
 

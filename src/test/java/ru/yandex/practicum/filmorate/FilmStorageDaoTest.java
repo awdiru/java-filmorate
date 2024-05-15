@@ -100,7 +100,9 @@ public class FilmStorageDaoTest {
     @Test
     public void testAddLike() {
         deleteBd();
-        Film film = createFilm();
+        Film film = new Film(1, "filmName", "filmDescription",
+                LocalDate.of(1990, 01, 01), 1000,
+                new Rating(1, "G"), new LinkedList<>(), new LinkedList<>(), new LinkedList<>(), 1);
         FilmStorageDao filmStorage = new FilmStorageDao(jdbcTemplate);
         filmStorage.add(film);
 
@@ -108,7 +110,7 @@ public class FilmStorageDaoTest {
         UserStorage userStorage = new UserStorageDao(jdbcTemplate);
         userStorage.add(user);
 
-        filmStorage.addLike(1, 1);
+        filmStorage.addLike(1, 1, 1);
         film.getLikes().add(1);
 
         Film sevedFilm = filmStorage.search(1);
@@ -129,7 +131,7 @@ public class FilmStorageDaoTest {
         UserStorage userStorage = new UserStorageDao(jdbcTemplate);
         userStorage.add(user);
 
-        filmStorage.addLike(1, 1);
+        filmStorage.addLike(1, 1, 1);
         filmStorage.deleteLike(1, 1);
 
         Film sevedFilm = filmStorage.search(1);
@@ -156,10 +158,10 @@ public class FilmStorageDaoTest {
 
         for (int i = 1; i < 5; i++) {
             for (int j = 1; j < 7 - i; j++) {
-                filmStorage.addLike(i, j);
+                filmStorage.addLike(i, j, 1);
             }
         }
-        filmStorage.addLike(5, 1);
+        filmStorage.addLike(5, 1, 1);
 
         List<Film> popFilms = new ArrayList<>();
         for (int i = 1; i < 5; i++) {
@@ -183,10 +185,41 @@ public class FilmStorageDaoTest {
 
     }
 
+    @Test
+    public void shouldReturnAverageRatingAfterLikes() {
+        deleteBd();
+        Film film = createFilmWithRating(3.0 / 2.0);
+        FilmStorageDao filmStorage = new FilmStorageDao(jdbcTemplate);
+        filmStorage.add(film);
+
+        User user1 = createUser();
+        User user2 = createUser();
+        UserStorage userStorage = new UserStorageDao(jdbcTemplate);
+        userStorage.add(user1);
+        userStorage.add(user2);
+
+        filmStorage.addLike(1, 1, 1);
+        filmStorage.addLike(1, 2, 2);
+        film.getLikes().add(1);
+        film.getLikes().add(2);
+
+        Film sevedFilm = filmStorage.search(1);
+        assertThat(sevedFilm)
+                .isNotNull()
+                .usingRecursiveComparison()
+                .isEqualTo(film);
+    }
+
     private Film createFilm() {
         return new Film(1, "filmName", "filmDescription",
                 LocalDate.of(1990, 01, 01), 1000,
-                new Rating(1, "G"), new LinkedList<>(), new LinkedList<>(), new LinkedList<>());
+                new Rating(1, "G"), new LinkedList<>(), new LinkedList<>(), new LinkedList<>(), 0);
+    }
+
+    private Film createFilmWithRating(double rating) {
+        return new Film(1, "filmName", "filmDescription",
+                LocalDate.of(1990, 01, 01), 1000,
+                new Rating(1, "G"), new LinkedList<>(), new LinkedList<>(), new LinkedList<>(), rating);
     }
 
     private User createUser() {

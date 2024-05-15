@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.controller.dao.impl;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import ru.yandex.practicum.filmorate.model.*;
 
@@ -31,7 +32,15 @@ public class DaoFactoryModel {
                 "(SELECT director_id FROM film_director WHERE film_id = ? ORDER BY director_id)";
         List<Director> directors = jdbcTemplate.query(sqlDirectors, (rs, rowNum) -> makeDirector(rs), filmId);
 
-        return new Film(filmId, name, description, releaseDate, duration, rating, likes, genres, directors);
+        String sqlGrade = "SELECT film_id, SUM (CAST (rating AS FLOAT)) / COUNT(film_id) AS rating " +
+                "FROM likes WHERE film_id = ? GROUP BY film_id";
+        double grade = 0;
+        try {
+            grade = jdbcTemplate.queryForObject(sqlGrade, (rs, rowNum) -> rs.getDouble("rating"), filmId);
+        } catch (EmptyResultDataAccessException ignored) {
+        }
+
+        return new Film(filmId, name, description, releaseDate, duration, rating, likes, genres, directors, grade);
     }
 
     static User makeUser(ResultSet resultSet, JdbcTemplate jdbcTemplate) throws SQLException {

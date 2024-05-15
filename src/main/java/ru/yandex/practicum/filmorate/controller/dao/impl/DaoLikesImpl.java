@@ -24,9 +24,9 @@ public class DaoLikesImpl implements DaoLikes {
     }
 
     @Override
-    public void addLike(int idFilm, int idUser) {
-        String sql = "INSERT INTO likes (film_id, user_id) VALUES (?, ?)";
-        jdbcTemplate.update(sql, idFilm, idUser);
+    public void addLike(int idFilm, int idUser, int rating) {
+        String sql = "INSERT INTO likes (film_id, user_id, rating) VALUES (?, ?, ?)";
+        jdbcTemplate.update(sql, idFilm, idUser, rating);
     }
 
     @Override
@@ -133,6 +133,20 @@ public class DaoLikesImpl implements DaoLikes {
         } catch (
                 EmptyResultDataAccessException e) {
             return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public double getRating(int filmId) {
+        String sql = "SELECT film_id, " +
+                "SUM (CAST (rating AS FLOAT)) / COUNT(film_id) AS rating " +
+                "FROM likes " +
+                "WHERE film_id = ? " +
+                "GROUP BY film_id";
+        try {
+            return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> rs.getDouble("rating"), filmId);
+        } catch (EmptyResultDataAccessException e) {
+            return 0;
         }
     }
 
